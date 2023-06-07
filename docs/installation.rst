@@ -3,83 +3,65 @@
 .. _PostgreSQL: https://www.postgresql.org/
 .. _MongoDB: https://www.mongodb.com/
 
-
-
-
 .. _installation:
 
 Installation
 ============
 
-CGRateS can be installed via packages as well as Go automated source install.
-We recommend using source installs for advanced users familiar with Go programming and packages for users not willing to be involved in the code building process.
+CGRateS can be installed either via packages or through an automated Go source installation. We recommend the latter for advanced users familiar with Go programming, and package installations for those not wanting to engage in the code building process.
 
-
-Using packages
+Using Packages
 --------------
 
-Depending on the packaged distribution, the following methods are available:
-
+The method of installation may vary based on the distribution package:
 
 Debian 
 ^^^^^^
 
-There are two main ways of installing the maintained packages:
+There are two primary ways to install the maintained packages:
 
-
-Aptitude repository 
+Aptitude Repository 
 ~~~~~~~~~~~~~~~~~~~
 
-
-Add the gpg key:
-
-::
-
-    sudo wget -O - https://apt.cgrates.org/apt.cgrates.org.gpg.key | sudo apt-key add -
-
-Add the repository in apt sources list:
+You can download and add the GPG key, add the repository to your apt sources list, update your system, and install CGRateS using the following commands:
 
 ::
 
+    # Download GPG Key
+    wget https://apt.cgrates.org/apt.cgrates.org.gpg.key -O apt.cgrates.org.gpg.key
+    # Verify the key before proceeding
+    # Move the key to the trusted area
+    sudo mv apt.cgrates.org.gpg.key /etc/apt/trusted.gpg.d/apt.cgrates.org.asc
+    # Add the repository to the apt sources list
     echo "deb http://apt.cgrates.org/debian/ v0.10 main" | sudo tee /etc/apt/sources.list.d/cgrates.list
-
-Update & install:
-
-::
-
+    # Update the system
     sudo apt-get update
+    # Install CGRateS
     sudo apt-get install cgrates
 
+Upon the completion of the installation, it is necessary to perform the :ref:`post-install <post_install>` steps to set up CGRateS properly and prepare it to run. After completing the *post-install* process, CGRateS will be configured in **/etc/cgrates/cgrates.json** and enabled in **/etc/default/cgrates**.
 
-Once the installation is completed, one should perform the :ref:`post-install <post_install>` section in order to have the CGRateS properly set and ready to run.
-After *post-install* actions are performed, CGRateS will be configured in **/etc/cgrates/cgrates.json** and enabled in **/etc/default/cgrates**.
+Manual Installation of .deb Package from Archive Server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-Manual installation of .deb package out of archive server
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-Run the following commands:
+To manually install the .deb package, use the following commands:
 
 ::
 
     wget http://pkg.cgrates.org/deb/v0.10/cgrates_current_amd64.deb
     dpkg -i cgrates_current_amd64.deb
 
-As a side note on http://pkg.cgrates.org/deb/ one can find an entire archive of CGRateS packages.
-
+Note: You can find a complete archive of CGRateS packages at http://pkg.cgrates.org/deb/.
 
 Redhat/Fedora/CentOS
 ^^^^^^^^^^^^^^^^^^^^
 
-There are two main ways of installing the maintained packages:
+There are two primary ways of installing the maintained packages:
 
-
-YUM repository
+YUM Repository
 ~~~~~~~~~~~~~~
 
-
-To install CGRateS out of YUM execute the following commands
+To install CGRateS via YUM, execute the following commands:
 
 ::
 
@@ -94,36 +76,32 @@ To install CGRateS out of YUM execute the following commands
     sudo yum update
     sudo yum install cgrates
 
-Once the installation is completed, one should perform the :ref:`post-install <post_install>` section in order to have the CGRateS properly set and ready to run.
-After *post-install* actions are performed, CGRateS will be configured in **/etc/cgrates/cgrates.json** and enabled in **/etc/default/cgrates**.
+After the installation, perform the :ref:`post-install <post_install>` section to have CGRateS set up and ready. Once *post-install* steps are completed, CGRateS will be configured in **/etc/cgrates/cgrates.json** and enabled in **/etc/default/cgrates**.
 
+Manual Installation of .rpm Package from Archive Server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Manual installation of .rpm package out of archive server
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-Run the following command:
+To manually install the .rpm package, use the following command:
 
 ::
 
     sudo rpm -i http://pkg.cgrates.org/rpm/v0.10/cgrates_current.rpm
 
-As a side note on http://pkg.cgrates.org/rpm/ one can find an entire archive of CGRateS packages.
+Note: An entire archive of CGRateS packages can be found at http://pkg.cgrates.org/rpm/.
 
-
-Using source
+Using Source
 ------------
 
-For developing CGRateS and switching between its versions, we are using the **go mods feature** introduced in go 1.13.
+For developing CGRateS and switching between its versions, we utilize the **go mods feature** introduced in Go 1.13.
 
 .. _InstallGO:
 
-Install GO Lang
+Install Go Lang
 ^^^^^^^^^^^^^^^
 
-First we have to setup the GO Lang to our OS. Feel free to download 
-the latest GO binary release from https://golang.org/dl/
-In this Tutorial we are going to install Go 1.17.5
+Firstly, we need to set up Go Lang on our OS. Feel free to download 
+the latest Go binary release from https://golang.org/dl/
+In this tutorial, we will install Go 1.17.5
 
 ::
 
@@ -132,7 +110,6 @@ In this Tutorial we are going to install Go 1.17.5
    wget https://go.dev/dl/go1.17.5.linux-amd64.tar.gz
    sudo tar -xvf go1.17.5.linux-amd64.tar.gz -C /usr/local/
    export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
-
 
 Build CGRateS from Source
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -145,19 +122,16 @@ Configure the project with the following commands:
    cd $HOME/go/src/github.com/cgrates/cgrates
    ./build.sh
 
-
 Create Debian / Ubuntu Packages from Source
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After compiling the source code you are ready to create the .deb packages
-for your Debian like OS. First lets install some dependencies: 
+After compiling the source code, you can create the .deb packages for your Debian-based OS. First, let's install some dependencies: 
 
 ::
 
    sudo apt-get install build-essential fakeroot dh-systemd
 
-Finally we are ready to create the system package. Before creation we make
-sure that we delete the old one first.
+We are now ready to create the system package. Before creation, we ensure to delete the old one first.
 
 ::
 
@@ -165,8 +139,7 @@ sure that we delete the old one first.
    rm -rf $HOME/go/src/github.com/cgrates/*.deb
    make deb
 
-After some time and maybe some console warnings, your CGRateS package will be ready.
-
+After a while, despite some possible console warnings, your CGRateS package will be ready.
 
 Install Custom Debian / Ubuntu Package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -176,95 +149,30 @@ Install Custom Debian / Ubuntu Package
    cd $HOME/go/src/github.com/cgrates
    sudo dpkg -i cgrates_*.deb
 
-
 Generate RPM Packages from Source
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Prerequisites
+Prerequisites:
  * :ref:`Install Golang <InstallGO>`
  * Git
 
    ::
 
-    sudo apt-get install git
+    sudo yum install git
 
-
- * RPM
+ * Build dependencies
 
    ::
 
-    sudo apt-get install rpm
+    sudo yum install -y rpm-build
+    sudo yum install -y dh-systemd
 
-Execute the following commands
+Building the RPMs:
 
 ::
 
-    cd $HOME/go/src/github.com/cgrates/cgrates
-    export gitLastCommit=$(git rev-parse HEAD)
-    export rpmTag=$(git log -1 --format=%ci | date +%Y%m%d%H%M%S)+$(git rev-parse --short HEAD)
-    mkdir -p $HOME/cgr_build/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-    wget -P $HOME/cgr_build/SOURCES https://github.com/cgrates/cgrates/archive/$gitLastCommit.tar.gz
-    cp $HOME/go/src/github.com/cgrates/cgrates/packages/redhat_fedora/cgrates.spec $HOME/cgr_build/SPECS
-    cd $HOME/cgr_build
-    rpmbuild -bb --define "_topdir $HOME/cgr_build" SPECS/cgrates.spec
+   cd $HOME/go/src/github.com/cgrates/cgrates/packages
+   make rpm
 
-
-.. _post_install:
-
-Post-install
-------------
-
-
-Database setup
-^^^^^^^^^^^^^^
-
-For its operation CGRateS uses **one or more** database types, depending on its nature, install and configuration being further necessary.
-
-At present we support the following databases:
-
-`Redis`_
-  Can be used as :ref:`DataDB`.
-  Optimized for real-time information access.
-  Once installed there should be no special requirements in terms of setup since no schema is necessary.
-
-`MySQL`_
-  Can be used as :ref:`StorDB`.
-  Optimized for CDR archiving and offline Tariff Plan versioning.
-  Once MySQL is installed, CGRateS database needs to be set-up out of provided scripts. (example for the paths set-up by debian package)
-
-  ::
-
-    cd /usr/share/cgrates/storage/mysql/
-    ./setup_cgr_db.sh root CGRateS.org localhost
-
-`PostgreSQL`_
-  Can be used as :ref:`StorDB`.
-  Optimized for CDR archiving and offline Tariff Plan versioning.
-  Once PostgreSQL is installed, CGRateS database needs to be set-up out of provided scripts (example for the paths set-up by debian package).
-
-  ::
-
-    cd /usr/share/cgrates/storage/postgres/
-    ./setup_cgr_db.sh
-
-`MongoDB`_
-  Can be used as :ref:`DataDB` as well as :ref:`StorDB`.
-  It is the first database that can be used to store all kinds of data stored from CGRateS from accounts, tariff plans to cdrs and logs.
-  Once MongoDB is installed, CGRateS database needs to be set-up out of provided scripts (example for the paths set-up by debian package)
-
-  ::
-
-    cd /usr/share/cgrates/storage/mongo/
-    ./setup_cgr_db.sh
-
-
-Set versions data
-^^^^^^^^^^^^^^^^^
-
-Once database setup is completed, we need to write the versions data. To do this, run migrator tool with the parameters specific to your database. 
-
-Sample usage for MySQL: 
-::
-
-   cgr-migrator -stordb_passwd="CGRateS.org" -exec="*set_versions"
+This will generate the RPMs in the directory $HOME/go/src/github.com/cgrates/cgrates/packages
 
