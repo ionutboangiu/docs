@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>ResourceS &#8212; CGRateS 0.10.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SupplierS" href="suppliers.html" />
+    <link rel="prev" title="ChargerS" href="chargers.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="suppliers.html" title="SupplierS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="chargers.html" title="ChargerS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="architecture.html" >Architecture</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="cgr-engine.html" accesskey="U">cgr-engine</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ResourceS</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="resources">
+<span id="id1"></span><h1>ResourceS<a class="headerlink" href="#resources" title="Permalink to this heading">¶</a></h1>
+<p><strong>ResourceS</strong> is a standalone subsystem part of the <strong>CGRateS</strong> infrastructure, designed to allocate virtual resources for the generic <em>Events</em> (hashmaps) it receives.</p>
+<p>Both receiving of <em>Events</em> as well as operational commands on the virtual resources is performed via a complete set of <a class="reference external" href="https://godoc.org/github.com/cgrates/cgrates/apier/">CGRateS RPC APIs</a>.</p>
+<p>Due it’s real-time nature, <strong>ResourceS</strong> are designed towards high throughput being able to process thousands of <em>Events</em> per second. This is doable since each <em>Resource</em> is a very light object, held in memory and eventually backed up in <em>DataDB</em>.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h2>
+<section id="id2">
+<h3>ResourceS<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<p><strong>ResourceS</strong> is the <strong>CGRateS</strong> component responsible of handling the <em>Resources</em>.</p>
+<p>It is configured within <strong>resources</strong> section from <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">JSON configuration</span></a> via the following parameters:</p>
+<dl class="simple">
+<dt>enabled</dt><dd><p>Will enable starting of the service. Possible values: &lt;true|false&gt;.</p>
+</dd>
+<dt>store_interval</dt><dd><p>Time interval for backing up the stats into <em>DataDB</em>.</p>
+</dd>
+<dt>thresholds_conns</dt><dd><p>Connections IDs towards <em>ThresholdS</em> component. If not defined, there will be no notifications sent to <em>ThresholdS</em> on <em>Resource</em> changes.</p>
+</dd>
+<dt>indexed_selects</dt><dd><p>Enable profile matching exclusively on indexes. If not enabled, the <em>ResourceProfiles</em> are checked one by one which for a larger number can slow down the processing time. Possible values: &lt;true|false&gt;.</p>
+</dd>
+<dt>string_indexed_fields</dt><dd><p>Query string indexes based only on these fields for faster processing. If commented out, each field from the event will be checked against indexes. If uncommented and defined as empty list, no fields will be checked.</p>
+</dd>
+<dt>prefix_indexed_fields</dt><dd><p>Query prefix indexes based only on these fields for faster processing. If defined as empty list, no fields will be checked.</p>
+</dd>
+<dt>nested_fields</dt><dd><p>Applied when all event fields are checked against indexes, and decides whether subfields are also checked.</p>
+</dd>
+</dl>
+</section>
+<section id="resourceprofile">
+<h3>ResourceProfile<a class="headerlink" href="#resourceprofile" title="Permalink to this heading">¶</a></h3>
+<p>The <strong>ResourceProfile</strong> is the configuration of a <em>Resource</em>. This will be performed over <a class="reference external" href="https://godoc.org/github.com/cgrates/cgrates/apier/">CGRateS RPC APIs</a> or <em>.csv</em> files. A profile is comprised out of the following parameters:</p>
+<dl class="simple">
+<dt>Tenant</dt><dd><p>The tenant on the platform (one can see the tenant as partition ID).</p>
+</dd>
+<dt>ID</dt><dd><p>Identifier for the <em>ResourceProfile</em>, unique within a <em>Tenant</em>.</p>
+</dd>
+<dt>FilterIDs</dt><dd><p>List of <em>FilterProfiles</em> which should match in order to consider the <em>ResourceProfile</em> matching the event.</p>
+</dd>
+<dt>ActivationInterval</dt><dd><p>The time interval when this profile becomes active. If undefined, the profile is always active. Other options are start time, end time or both.</p>
+</dd>
+<dt>UsageTTL</dt><dd><p>Autoexpire resource allocation after this time duration.</p>
+</dd>
+<dt>Limit</dt><dd><p>The number of allocations this resource is entitled to.</p>
+</dd>
+<dt>AllocationMessage</dt><dd><p>The message returned when this resource is responsible for allocation.</p>
+</dd>
+<dt>Blocker</dt><dd><p>When specified, no futher resources are processed after this one.</p>
+</dd>
+<dt>Stored</dt><dd><p>Enable offline backups for this resource</p>
+</dd>
+<dt>Weight</dt><dd><p>Order the <em>Resources</em> matching the event. Higher value - higher priority.</p>
+</dd>
+<dt>ThresholdIDs</dt><dd><p>List of ThresholdProfiles targetted by the <em>Resource</em>. If empty, the match will be done in <a class="reference internal" href="thresholds.html#thresholds"><span class="std std-ref">ThresholdS</span></a> component.</p>
+</dd>
+</dl>
+</section>
+<section id="resourceusage">
+<h3>ResourceUsage<a class="headerlink" href="#resourceusage" title="Permalink to this heading">¶</a></h3>
+<p>A <strong>ResourceUsage</strong> represents a counted allocation within a <em>Resource</em>. The following parameters are present within:</p>
+<dl class="simple">
+<dt>Tenant</dt><dd><p>The tenant on the platform (one can see the tenant as partition ID).</p>
+</dd>
+<dt>ID</dt><dd><p>Identifier for the <em>ResourceUsage</em>.</p>
+</dd>
+<dt>ExpiryTime</dt><dd><p>Exact time when this allocation expires.</p>
+</dd>
+<dt>Units</dt><dd><p>Number of units allocated by this <em>ResourceUsage</em>.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="processing-logic">
+<h2>Processing logic<a class="headerlink" href="#processing-logic" title="Permalink to this heading">¶</a></h2>
+<p>When a new <em>Event</em> is received, <strong>ResourceS</strong> will pass it to <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a> in order to find all <em>Resource</em> objects matching the <em>Event</em>.</p>
+<p>As a result of the selection process we will further get an ordered list of <em>Resource</em> which are matching the <em>Event</em> and are active at the request time.</p>
+<p>Depending of the <em>RPC API</em> used, we will have the following behavior further:</p>
+<dl>
+<dt>ResourcesForEvent</dt><dd><p>Will simply return the list of <em>Resources</em> matching so far.</p>
+</dd>
+<dt>AuthorizeResources</dt><dd><p>Out of <em>Resources</em> matching, ordered based on <em>Weight</em>, it will use the first one with available units to authorize the request. Returns <em>RESOURCE_UNAVAILABLE</em> error back in case of no available units found. No actual allocation is performed.</p>
+</dd>
+<dt>AllocateResource</dt><dd><p>All of the <em>Resources</em> matching the event will be operated and requested units will be deducted, independent of being available or going on negative. The first one with value higher or equal to zero will be responsible of allocation and it’s message will be returned as allocation message. If no allocation message is defined for the allocated resource, it’s ID will be returned instead.</p>
+<p>If no resources are allocated <em>RESOURCE_UNAVAILABLE</em> will be returned as error.</p>
+</dd>
+<dt>ReleaseResource</dt><dd><p>Will release all the previously allocated resources for an <em>UsageID</em>. If <em>UsageID</em> is not found (which can be the case of restart), will perform a standard search via <em>FilterS</em> and try to dealocate the resources matching there.</p>
+</dd>
+</dl>
+<p>Depending on configuration each <em>Resource</em> can be backed up regularly and asynchronously to DataDB so it can survive process restarts.</p>
+<p>After each resource modification (allocation or release) the <a class="reference internal" href="thresholds.html#thresholds"><span class="std std-ref">ThresholdS</span></a> will be notified with the <em>Resource</em> itself where mechanisms like notifications or fraud-detection can be triggered.</p>
+</section>
+<section id="use-cases">
+<h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Monitor resources for a group of accounts(ie. based on a special field in the events).</p></li>
+<li><p>Limit the number of CPS for a destination/supplier/account (done via UsageTTL of 1s).</p></li>
+<li><p>Limit resources for a destination/supplier/account/time of day/etc.</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">ResourceS</a><ul>
+<li><a class="reference internal" href="#parameters">Parameters</a><ul>
+<li><a class="reference internal" href="#id2">ResourceS</a></li>
+<li><a class="reference internal" href="#resourceprofile">ResourceProfile</a></li>
+<li><a class="reference internal" href="#resourceusage">ResourceUsage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#processing-logic">Processing logic</a></li>
+<li><a class="reference internal" href="#use-cases">Use cases</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="chargers.html"
+                          title="previous chapter">ChargerS</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="suppliers.html"
+                          title="next chapter">SupplierS</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/resources.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="suppliers.html" title="SupplierS"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="chargers.html" title="ChargerS"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="architecture.html" >Architecture</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="cgr-engine.html" >cgr-engine</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ResourceS</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012-2020, ITsysCOM GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    </div>
+  </body>
+</html>

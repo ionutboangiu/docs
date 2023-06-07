@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>SessionS &#8212; CGRateS 0.10.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="RALs" href="rals.html" />
+    <link rel="prev" title="EventReaderService" href="ers.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="rals.html" title="RALs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ers.html" title="EventReaderService"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="architecture.html" >Architecture</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="cgr-engine.html" accesskey="U">cgr-engine</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SessionS</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="sessions">
+<span id="id1"></span><h1>SessionS<a class="headerlink" href="#sessions" title="Permalink to this heading">¶</a></h1>
+<p><strong>SessionS</strong> is a standalone subsystem within <strong>CGRateS</strong> responsible to manage virtual sessions based on events received. It is accessed via <a class="reference external" href="https://godoc.org/github.com/cgrates/cgrates/apier/">CGRateS RPC APIs</a>.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h2>
+<section id="id2">
+<h3>SessionS<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<p>Configured within <strong>sessions</strong> section within <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">JSON configuration</span></a> via the following parameters:</p>
+<dl class="simple">
+<dt>enabled</dt><dd><p>Will enable starting of the service. Possible values: &lt;true|false&gt;.</p>
+</dd>
+<dt>listen_bijson</dt><dd><p>Address where the <em>SessionS</em> listens for bidirectional JSON requests.</p>
+</dd>
+<dt>chargers_conns</dt><dd><p>Connections towards <a class="reference internal" href="chargers.html#chargers"><span class="std std-ref">ChargerS</span></a> component to query charges for events.</p>
+</dd>
+<dt>rals_conns</dt><dd><p>Connections towards <a class="reference internal" href="rals.html#rals"><span class="std std-ref">RALs</span></a> component to implement auth and balance reservation for events.</p>
+</dd>
+<dt>cdrs_conns</dt><dd><p>Connections towards <a class="reference internal" href="cdrs.html#cdrs"><span class="std std-ref">CDRs</span></a> component where CDRs and session costs will be sent.</p>
+</dd>
+<dt>resources_conns</dt><dd><p>Connections towards <a class="reference internal" href="resources.html#resources"><span class="std std-ref">ResourceS</span></a> component for resources management.</p>
+</dd>
+<dt>thresholds_conns</dt><dd><p>Connections towards <a class="reference internal" href="thresholds.html#thresholds"><span class="std std-ref">ThresholdS</span></a> component to monitor and react to information within events.</p>
+</dd>
+<dt>stats_conns</dt><dd><p>Connections towards <a class="reference internal" href="stats.html#stats"><span class="std std-ref">StatS</span></a> component to compute stat metrics for events.</p>
+</dd>
+<dt>suppliers_conns</dt><dd><p>Connections towards <a class="reference internal" href="suppliers.html#suppliers"><span class="std std-ref">SupplierS</span></a> component to compute suppliers for events.</p>
+</dd>
+<dt>attributes_conns</dt><dd><p>Connections towards <a class="reference internal" href="attributes.html#attributes"><span class="std std-ref">AttributeS</span></a> component for altering the events.</p>
+</dd>
+<dt>replication_conns</dt><dd><p>Connections towards other <a class="reference internal" href="#sessions"><span class="std std-ref">SessionS</span></a> components, used in case of session high-availability.</p>
+</dd>
+<dt>debit_interval</dt><dd><p>Default debit interval in case of <em>*prepaid</em> requests. Zero will disable automatic debits in favour of manual ones.</p>
+</dd>
+<dt>store_session_costs</dt><dd><p>Used in case of decoupling events charging from CDR processing. The session costs debitted by <em>SessionS</em> will be stored into <em>StorDB.sessions_costs</em> table and merged into the CDR later when received.</p>
+</dd>
+<dt>default_usage</dt><dd><p>Imposes the default usage for each tipe of call.</p>
+</dd>
+<dt>session_ttl</dt><dd><p>Enables automatic detection/removal of stale sessions. Zero will disable the functionality.</p>
+</dd>
+<dt>session_ttl_max_delay</dt><dd><p>Used in tandem with <em>session_ttl</em> to randomize disconnects in order to avoid system peaks.</p>
+</dd>
+<dt>session_ttl_last_used</dt><dd><p>Used in tandem with <em>session_ttl</em> to emulate the last used information for missing terminate event.</p>
+</dd>
+<dt>session_ttl_usage</dt><dd><p>Used in tandem with <em>session_ttl</em> to emulate the total usage information for the incomplete session.</p>
+</dd>
+<dt>session_indexes</dt><dd><p>List of fields to index out of events. Used to speed up response time for session queries.</p>
+</dd>
+<dt>client_protocol</dt><dd><p>Protocol version used when acting as a JSON-RPC client (ie: force disconnecting the sessions).</p>
+</dd>
+<dt>channel_sync_interval</dt><dd><p>Sync channels at regular intervals to detect stale sessions. Zero will disable this functionality.</p>
+</dd>
+<dt>terminate_attempts</dt><dd><p>Limit the number of attempts to terminate a session in case of errors.</p>
+</dd>
+<dt>alterable_fields</dt><dd><p>List of fields which are allowed to be changed by update/terminate events.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="processing-logic">
+<h2>Processing logic<a class="headerlink" href="#processing-logic" title="Permalink to this heading">¶</a></h2>
+<p>Depends on the implementation of particular <em>RPC API</em> used.</p>
+<section id="getactivesessions-getactivesessionscount-getpassivesessions-getpassivesessionscount">
+<h3>GetActiveSessions, GetActiveSessionsCount, GetPassiveSessions, GetPassiveSessionsCount<a class="headerlink" href="#getactivesessions-getactivesessionscount-getpassivesessions-getpassivesessionscount" title="Permalink to this heading">¶</a></h3>
+<p>Returns the list of sessions based on the received filters.</p>
+</section>
+<section id="setpassivesession">
+<h3>SetPassiveSession<a class="headerlink" href="#setpassivesession" title="Permalink to this heading">¶</a></h3>
+<p>Used by <em>CGRateS</em> in High-Availability setups to replicate sessions between different <em>SessionS</em> nodes.</p>
+</section>
+<section id="replicatesessions">
+<h3>ReplicateSessions<a class="headerlink" href="#replicatesessions" title="Permalink to this heading">¶</a></h3>
+<p>Starts manually a replication process. Useful in cases when a node comes back online or entering maintenance mode.</p>
+</section>
+<section id="authorizeevent-authorizeeventwithdigest">
+<h3>AuthorizeEvent, AuthorizeEventWithDigest<a class="headerlink" href="#authorizeevent-authorizeeventwithdigest" title="Permalink to this heading">¶</a></h3>
+<p>Used for event authorization. It’s behaviour can be controlled via a number of different parameters:</p>
+<dl class="simple">
+<dt>GetAttributes</dt><dd><p>Activates altering of the event by <a class="reference internal" href="attributes.html#attributes"><span class="std std-ref">AttributeS</span></a>.</p>
+</dd>
+<dt>AttributeIDs</dt><dd><p>Selects only specific attribute profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+<dt>AuthorizeResources</dt><dd><p>Activates event authorization via <a class="reference internal" href="resources.html#resources"><span class="std std-ref">ResourceS</span></a>. Returns <em>RESOURCE_UNAVAILABLE</em> if no resources left for the event.</p>
+</dd>
+<dt>GetMaxUsage</dt><dd><p>Queries <a class="reference internal" href="rals.html#rals"><span class="std std-ref">RALs</span></a> for event’s maximum usage allowed.</p>
+</dd>
+<dt>ProcessThresholds</dt><dd><p>Sends the event to <a class="reference internal" href="thresholds.html#thresholds"><span class="std std-ref">ThresholdS</span></a> to be used in monitoring.</p>
+</dd>
+<dt>ThresholdIDs</dt><dd><p>Selects only specific threshold profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+<dt>ProcessStats</dt><dd><p>Sends the event to <a class="reference internal" href="stats.html#stats"><span class="std std-ref">StatS</span></a> for computing stat metrics.</p>
+</dd>
+<dt>StatIDs</dt><dd><p>Selects only specific stat profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+<dt>GetSuppliers</dt><dd><p>Sends the event to <a class="reference internal" href="suppliers.html#suppliers"><span class="std std-ref">SupplierS</span></a> to return the list of suppliers for it as part as authorization.</p>
+</dd>
+<dt>SuppliersMaxCost</dt><dd><p>Mechanism to implement revenue assurance for suppliers coming from <a class="reference internal" href="suppliers.html#suppliers"><span class="std std-ref">SupplierS</span></a> component. Can be defined as a number or special meta variable: <em>*event_cost</em>, assuring that the supplier cost will never be higher than event cost.</p>
+</dd>
+<dt>SuppliersIgnoreErrors</dt><dd><p>Instructs to ignore suppliers with errors(ie: without price for specific destination in tariff plan). Without this setting the whole query will fail instead of just the supplier being ignored.</p>
+</dd>
+</dl>
+</section>
+<section id="initiatesession-initiatesessionwithdigest">
+<h3>InitiateSession, InitiateSessionWithDigest<a class="headerlink" href="#initiatesession-initiatesessionwithdigest" title="Permalink to this heading">¶</a></h3>
+<p>Used in case of session initiation. It’s behaviour can be influenced by following arguments:</p>
+<dl class="simple">
+<dt>GetAttributes</dt><dd><p>Activates altering of the event by <a class="reference internal" href="attributes.html#attributes"><span class="std std-ref">AttributeS</span></a>.</p>
+</dd>
+<dt>AttributeIDs</dt><dd><p>Selects only specific attribute profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+<dt>AllocateResources</dt><dd><p>Process the event with <a class="reference internal" href="resources.html#resources"><span class="std std-ref">ResourceS</span></a>, allocating the matching requests. Returns <em>RESOURCE_UNAVAILABLE</em> if no resources left for the event.</p>
+</dd>
+<dt>InitSession</dt><dd><p>Initiates the session executing following steps:</p>
+<ul class="simple">
+<li><p>Fork session based on matched <a class="reference internal" href="chargers.html#chargers"><span class="std std-ref">ChargerS</span></a> profiles.</p></li>
+<li><p>Start debit loops for <em>*prepaid</em> requests if <em>DebitInterval</em> is higher than 0.</p></li>
+<li><p>Index the session internally and start internal timers for detecting stale sessions.</p></li>
+</ul>
+</dd>
+<dt>ProcessThresholds</dt><dd><p>Sends the event to <a class="reference internal" href="thresholds.html#thresholds"><span class="std std-ref">ThresholdS</span></a> to be used in monitoring.</p>
+</dd>
+<dt>ThresholdIDs</dt><dd><p>Selects only specific threshold profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+<dt>ProcessStats</dt><dd><p>Sends the event to <a class="reference internal" href="stats.html#stats"><span class="std std-ref">StatS</span></a> for computing stat metrics.</p>
+</dd>
+<dt>StatIDs</dt><dd><p>Selects only specific stat profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+</dl>
+</section>
+<section id="updatesession">
+<h3>UpdateSession<a class="headerlink" href="#updatesession" title="Permalink to this heading">¶</a></h3>
+<p>Used to update an existing session or initiating a new one if none found. It’s behaviour can be influenced by the following arguments:</p>
+<dl class="simple">
+<dt>GetAttributes</dt><dd><p>Use <a class="reference internal" href="attributes.html#attributes"><span class="std std-ref">AttributeS</span></a> to alter the event.</p>
+</dd>
+<dt>AttributeIDs</dt><dd><p>Selects only specific attribute profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+<dt>UpdateSession</dt><dd><p>Involves charging mechanism into processing. Following steps are further executed:</p>
+<ul class="simple">
+<li><p>Relocate session if <em>InitialOriginID</em> field is present in the event.</p></li>
+<li><p>Initiate session if the <em>CGRID</em> is not found within the active sessions.</p></li>
+<li><p>Update timers for session stale detection mechanism.</p></li>
+<li><p>Debit the session usage for all the derived <em>*prepaid</em> sessions.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="terminatesession">
+<h3>TerminateSession<a class="headerlink" href="#terminatesession" title="Permalink to this heading">¶</a></h3>
+<p>Used to terminate an existing session or to initiate+terminate a new one. It’s behaviour can be influenced by the following arguments:</p>
+<dl class="simple">
+<dt>TerminateSession</dt><dd><p>Stop the charging process. Involves the following steps:</p>
+<ul class="simple">
+<li><p>Relocate session if <em>InitialOriginID</em> field is present in the event.</p></li>
+<li><p>Initiate session if the <em>CGRID</em> is not found within the active sessions.</p></li>
+<li><p>Unindex the session so it does not longer show up in active sessions queries.</p></li>
+<li><p>Stop the timer for session stale detection mechanism.</p></li>
+<li><p>Stop the debit loops if exist.</p></li>
+<li><p>Balance the charges (refund or debit more).</p></li>
+<li><p>Store the session costs if configured.</p></li>
+<li><p>Cache the session for later CDRs if configured.</p></li>
+</ul>
+</dd>
+<dt>ReleaseResources</dt><dd><p>Will release the aquired resources within <a class="reference internal" href="resources.html#resources"><span class="std std-ref">ResourceS</span></a>.</p>
+</dd>
+<dt>ProcessThresholds</dt><dd><p>Send the event to <a class="reference internal" href="thresholds.html#thresholds"><span class="std std-ref">ThresholdS</span></a> for monitoring.</p>
+</dd>
+<dt>ThresholdIDs</dt><dd><p>Selects only specific threshold profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+<dt>ProcessStats</dt><dd><p>Send the event to <a class="reference internal" href="stats.html#stats"><span class="std std-ref">StatS</span></a> for building the stat metrics.</p>
+</dd>
+<dt>StatIDs</dt><dd><p>Selects only specific stat profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+</dl>
+</section>
+<section id="processmessage">
+<h3>ProcessMessage<a class="headerlink" href="#processmessage" title="Permalink to this heading">¶</a></h3>
+<p>Optimized for event charging, without creating sessions based on it. Influenced by the following arguments:</p>
+<dl class="simple">
+<dt>GetAttributes</dt><dd><p>Alter the event via <a class="reference internal" href="attributes.html#attributes"><span class="std std-ref">AttributeS</span></a>.</p>
+</dd>
+<dt>AttributeIDs</dt><dd><p>Selects only specific attribute profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+<dt>AllocateResources</dt><dd><p>Alter the event via <a class="reference internal" href="resources.html#resources"><span class="std std-ref">ResourceS</span></a> for resource allocation.</p>
+</dd>
+<dt>Debit</dt><dd><p>Debit the event via <a class="reference internal" href="rals.html#rals"><span class="std std-ref">RALs</span></a>. Uses <a class="reference internal" href="chargers.html#chargers"><span class="std std-ref">ChargerS</span></a> to fork the event if needed.</p>
+</dd>
+<dt>ProcessThresholds</dt><dd><p>Send the event to <a class="reference internal" href="thresholds.html#thresholds"><span class="std std-ref">ThresholdS</span></a> for monitoring.</p>
+</dd>
+<dt>ThresholdIDs</dt><dd><p>Selects only specific threshold profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+<dt>ProcessStats</dt><dd><p>Send the event to <a class="reference internal" href="stats.html#stats"><span class="std std-ref">StatS</span></a> for building the stat metrics.</p>
+</dd>
+<dt>StatIDs</dt><dd><p>Selects only specific stat profiles (instead of discovering them via <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>). Faster in processing than the discovery mechanism.</p>
+</dd>
+<dt>GetSuppliers</dt><dd><p>Sends the event to <a class="reference internal" href="suppliers.html#suppliers"><span class="std std-ref">SupplierS</span></a> to return the list of suppliers for it.</p>
+</dd>
+<dt>SuppliersMaxCost</dt><dd><p>Mechanism to implement revenue assurance for suppliers coming from <a class="reference internal" href="suppliers.html#suppliers"><span class="std std-ref">SupplierS</span></a> component. Can be a number or special meta variable: <em>*event_cost</em>, assuring that the supplier cost will never be higher than event cost.</p>
+</dd>
+<dt>SuppliersIgnoreErrors</dt><dd><p>Instructs to ignore suppliers with errors(ie: without price for specific destination in tariff plan). Without this setting the whole query will fail instead of just the supplier being ignored.</p>
+</dd>
+</dl>
+</section>
+<section id="processcdr">
+<h3>ProcessCDR<a class="headerlink" href="#processcdr" title="Permalink to this heading">¶</a></h3>
+<p>Build the CDR out of the event and send it to <a class="reference internal" href="cdrs.html#cdrs"><span class="std std-ref">CDRs</span></a>. It has the ability to use cached sessions for obtaining additional information like fields with values or derived charges, forking also the CDR based on that.</p>
+</section>
+<section id="processevent">
+<h3>ProcessEvent<a class="headerlink" href="#processevent" title="Permalink to this heading">¶</a></h3>
+<p>Will generically process an event, having the ability to merge all the functionality of previous processing APIs.</p>
+<p>Instead of arguments, the options for enabling various functionaity will come in the form of <em>Flags</em>. These will be of two types: <strong>main</strong> and <strong>auxiliary</strong>, the last ones being considered suboptions of the first. The available flags are:</p>
+<dl>
+<dt>*attributes</dt><dd><p>Activates altering of the event via <a class="reference internal" href="attributes.html#attributes"><span class="std std-ref">AttributeS</span></a>.</p>
+</dd>
+<dt>*cost</dt><dd><p>Queries <a class="reference internal" href="rals.html#rals"><span class="std std-ref">RALs</span></a> for event cost.</p>
+</dd>
+<dt>*resources</dt><dd><p>Process the event with <a class="reference internal" href="resources.html#resources"><span class="std std-ref">ResourceS</span></a>. Additional auxiliary flags can be specified here:</p>
+<dl class="simple">
+<dt><strong>*authorize</strong></dt><dd><p>Authorize the event.</p>
+</dd>
+<dt><strong>*allocate</strong></dt><dd><p>Allocate resources for the event.</p>
+</dd>
+<dt><strong>*release</strong></dt><dd><p>Release the resources used for the event.</p>
+</dd>
+</dl>
+</dd>
+<dt>*rals</dt><dd><p>Process the event with <a class="reference internal" href="rals.html#rals"><span class="std std-ref">RALs</span></a>. Auxiliary flags available:</p>
+<dl class="simple">
+<dt><strong>*authorize</strong></dt><dd><p>Authorize the event.</p>
+</dd>
+<dt><strong>*initiate</strong></dt><dd><p>Initialize a session out of event.</p>
+</dd>
+<dt><strong>*update</strong></dt><dd><p>Update a sesssion (or initialize + update) out of event.</p>
+</dd>
+<dt><strong>*terminate</strong></dt><dd><p>Terminate a session (or initialize + terminate) out of event.</p>
+</dd>
+</dl>
+</dd>
+<dt>*suppliers</dt><dd><p>Process the event with <a class="reference internal" href="suppliers.html#suppliers"><span class="std std-ref">SupplierS</span></a>. Auxiliary flags available:</p>
+<dl class="simple">
+<dt><strong>*ignore_errors</strong></dt><dd><p>Ignore the suppliers with errors instead of failing the request completely.</p>
+</dd>
+<dt><strong>*event_cost</strong></dt><dd><p>Ignore suppliers with cost higher than the event cost.</p>
+</dd>
+</dl>
+</dd>
+<dt>*thresholds</dt><dd><p>Process the event with <a class="reference internal" href="thresholds.html#thresholds"><span class="std std-ref">ThresholdS</span></a> for monitoring.</p>
+</dd>
+<dt>*stats</dt><dd><p>Process the event with <a class="reference internal" href="stats.html#stats"><span class="std std-ref">StatS</span></a> for metrics calculation.</p>
+</dd>
+<dt>*cdrs</dt><dd><p>Create a CDR out of the event with <a class="reference internal" href="cdrs.html#cdrs"><span class="std std-ref">CDRs</span></a>.</p>
+</dd>
+</dl>
+</section>
+<section id="getcost">
+<h3>GetCost<a class="headerlink" href="#getcost" title="Permalink to this heading">¶</a></h3>
+<p>Queries the cost for event from <a class="reference internal" href="rals.html#rals"><span class="std std-ref">RALs</span></a>. Additional processing options can be selected via the <em>Flags</em> argument. Possible flags:</p>
+<dl class="simple">
+<dt>*attributes</dt><dd><p>Use <a class="reference internal" href="attributes.html#attributes"><span class="std std-ref">AttributeS</span></a> to alter the event before cost being calculated.</p>
+</dd>
+</dl>
+</section>
+<section id="syncsessions">
+<h3>SyncSessions<a class="headerlink" href="#syncsessions" title="Permalink to this heading">¶</a></h3>
+<p>Manually initiate a sync sessions mechanism. All the connections will be synced and stale sessions will be automatically disconnected.</p>
+</section>
+<section id="forcedisconnect">
+<h3>ForceDisconnect<a class="headerlink" href="#forcedisconnect" title="Permalink to this heading">¶</a></h3>
+<p>Disconnect the session matching the filter.</p>
+</section>
+<section id="activatesessions">
+<h3>ActivateSessions<a class="headerlink" href="#activatesessions" title="Permalink to this heading">¶</a></h3>
+<p>Manually activate a session which is marked as passive.</p>
+</section>
+<section id="deactivatesessions">
+<h3>DeactivateSessions<a class="headerlink" href="#deactivatesessions" title="Permalink to this heading">¶</a></h3>
+<p>Manually deactivate a session which is marked as active.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">SessionS</a><ul>
+<li><a class="reference internal" href="#parameters">Parameters</a><ul>
+<li><a class="reference internal" href="#id2">SessionS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#processing-logic">Processing logic</a><ul>
+<li><a class="reference internal" href="#getactivesessions-getactivesessionscount-getpassivesessions-getpassivesessionscount">GetActiveSessions, GetActiveSessionsCount, GetPassiveSessions, GetPassiveSessionsCount</a></li>
+<li><a class="reference internal" href="#setpassivesession">SetPassiveSession</a></li>
+<li><a class="reference internal" href="#replicatesessions">ReplicateSessions</a></li>
+<li><a class="reference internal" href="#authorizeevent-authorizeeventwithdigest">AuthorizeEvent, AuthorizeEventWithDigest</a></li>
+<li><a class="reference internal" href="#initiatesession-initiatesessionwithdigest">InitiateSession, InitiateSessionWithDigest</a></li>
+<li><a class="reference internal" href="#updatesession">UpdateSession</a></li>
+<li><a class="reference internal" href="#terminatesession">TerminateSession</a></li>
+<li><a class="reference internal" href="#processmessage">ProcessMessage</a></li>
+<li><a class="reference internal" href="#processcdr">ProcessCDR</a></li>
+<li><a class="reference internal" href="#processevent">ProcessEvent</a></li>
+<li><a class="reference internal" href="#getcost">GetCost</a></li>
+<li><a class="reference internal" href="#syncsessions">SyncSessions</a></li>
+<li><a class="reference internal" href="#forcedisconnect">ForceDisconnect</a></li>
+<li><a class="reference internal" href="#activatesessions">ActivateSessions</a></li>
+<li><a class="reference internal" href="#deactivatesessions">DeactivateSessions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="ers.html"
+                          title="previous chapter">EventReaderService</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="rals.html"
+                          title="next chapter">RALs</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/sessions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="rals.html" title="RALs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ers.html" title="EventReaderService"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="architecture.html" >Architecture</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="cgr-engine.html" >cgr-engine</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SessionS</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012-2020, ITsysCOM GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    </div>
+  </body>
+</html>

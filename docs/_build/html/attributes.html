@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>AttributeS &#8212; CGRateS 0.10.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ChargerS" href="chargers.html" />
+    <link rel="prev" title="CDRe" href="cdre.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="chargers.html" title="ChargerS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cdre.html" title="CDRe"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="architecture.html" >Architecture</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="cgr-engine.html" accesskey="U">cgr-engine</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">AttributeS</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="attributes">
+<span id="id1"></span><h1>AttributeS<a class="headerlink" href="#attributes" title="Permalink to this heading">¶</a></h1>
+<p><strong>AttributeS</strong> is a standalone subsystem within <strong>CGRateS</strong> and it is the equivalent of a key-value store. It is accessed via <a class="reference external" href="https://godoc.org/github.com/cgrates/cgrates/apier/">CGRateS RPC APIs</a>.</p>
+<p>As most of the other subsystems, it is performance oriented, stored inside <em>DataDB</em> but cached inside the <em>cgr-engine</em> process.
+Caching can be done dynamically/on-demand or at start-time/precached and it is configurable within <em>cache</em> section in the <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">JSON configuration</span></a>.</p>
+<section id="selection">
+<h2>Selection<a class="headerlink" href="#selection" title="Permalink to this heading">¶</a></h2>
+<p>It is able to process generic events (hashmaps) and decision for matching it is outsourced to <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a>.</p>
+<p>If there are multiple profiles (configurations) matching, the one with highest <em>Weight</em> will be the winner. There can be only one <em>AttributeProfile</em> processing the event per <em>process run</em>. If one configures multiple <em>process runs</em> either in  <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">JSON configuration</span></a> or as parameter to the <em>.ProcessEvent</em> API call, the output event from one <em>process run</em> will be forwarded as input to the next selected profile. There will be independent <em>AttributeProfile</em> selection performed for each run, hence the event fields modified in one run can be applied as filters to the next <em>process run</em>, giving out the possibility to chain <em>AttributeProfiles</em> and have multiple replacements with a minimum of performance penalty (in-memory matching).</p>
+</section>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h2>
+<section id="id2">
+<h3>AttributeS<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<p><strong>AttributeS</strong> is the <strong>CGRateS</strong> component responsible of handling the <em>AttributeProfiles</em>.</p>
+<p>It is configured within <strong>attributes</strong> section from <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">JSON configuration</span></a> via the following parameters:</p>
+<dl class="simple">
+<dt>enabled</dt><dd><p>Will enable starting of the service. Possible values: &lt;true|false&gt;.</p>
+</dd>
+<dt>indexed_selects</dt><dd><p>Enable profile matching exclusively on indexes. If not enabled, the <em>ResourceProfiles</em> are checked one by one which for a larger number can slow down the processing time. Possible values: &lt;true|false&gt;.</p>
+</dd>
+<dt>string_indexed_fields</dt><dd><p>Query string indexes based only on these fields for faster processing. If commented out, each field from the event will be checked against indexes. If uncommented and defined as empty list, no fields will be checked.</p>
+</dd>
+<dt>prefix_indexed_fields</dt><dd><p>Query prefix indexes based only on these fields for faster processing. If defined as empty list, no fields will be checked.</p>
+</dd>
+<dt>nested_fields</dt><dd><p>Applied when all event fields are checked against indexes, and decides whether subfields are also checked.</p>
+</dd>
+<dt>process_runs</dt><dd><p>Limit the number of loops when processing an Event. The event loop is however clever enough to stop when the same processing occurs or no more additional profiles are matching, so higher numbers are ignored if not needed.</p>
+</dd>
+</dl>
+</section>
+<section id="attributeprofile">
+<span id="id3"></span><h3>AttributeProfile<a class="headerlink" href="#attributeprofile" title="Permalink to this heading">¶</a></h3>
+<p>Represents the configuration for a group of attributes applied.</p>
+<dl class="simple">
+<dt>Tenant</dt><dd><p>The tenant on the platform (one can see the tenant as partition ID)</p>
+</dd>
+<dt>ID</dt><dd><p>Identifier for the <em>AttributeProfile</em>, unique within a <em>Tenant</em></p>
+</dd>
+<dt>Context</dt><dd><p>A list of <em>contexts</em> applying to this profile. A <em>context</em> is usually associated with a logical phase during event processing (ie: <em>*sessions</em> or <em>*cdrs</em> for events parsed by <a class="reference internal" href="sessions.html#sessions"><span class="std std-ref">SessionS</span></a> or <a class="reference internal" href="cdrs.html#cdrs"><span class="std std-ref">CDRs</span></a>)</p>
+</dd>
+<dt>FilterIDs</dt><dd><p>List of <em>FilterProfiles</em> which should match in order to consider the <em>AttributeProfile</em> matching the event.</p>
+</dd>
+<dt>ActivationInterval</dt><dd><p>The time interval when this profile becomes active. If undefined, the profile is always active. Other options are start time, end time or both.</p>
+</dd>
+<dt>Blocker</dt><dd><p>In case of multiple <em>process runs</em> are allowed, this flag will break further processing.</p>
+</dd>
+<dt>Weight</dt><dd><p>Used in case of multiple profiles matching an event. The higher, the better (0 has lowest possible priority).</p>
+</dd>
+<dt>Attributes</dt><dd><p>List of <a class="reference internal" href="#attribute"><span class="std std-ref">Attribute</span></a> objects part of this profile.</p>
+</dd>
+</dl>
+</section>
+<section id="attribute">
+<span id="id4"></span><h3>Attribute<a class="headerlink" href="#attribute" title="Permalink to this heading">¶</a></h3>
+<dl>
+<dt>FilterIDs</dt><dd><p>List of <em>FilterProfiles</em> which should match in order to consider the <em>Attribute</em> matching the event.</p>
+</dd>
+<dt>Path</dt><dd><p>Identifying the targeted absolute path within the processed event.</p>
+</dd>
+<dt>Type</dt><dd><p>Represents the type of substitution which will be performed on the Event. The following <em>Types</em> are available:</p>
+<dl class="simple">
+<dt><strong>*constant</strong></dt><dd><p>The <em>Value</em> is a constant value, it will just set the <em>FieldName</em> to this value as it is.</p>
+</dd>
+<dt><strong>*variable</strong></dt><dd><p>The <em>Value</em> is a <em>RSRParser</em> which will be able to capture the value out of one or more fields in the event (also combined with other constants) and write it to <em>Path</em>.</p>
+</dd>
+<dt><strong>*composed</strong></dt><dd><p>Same as <em>*variable</em> but instead of overwriting <em>Path</em>, it will append to it.</p>
+</dd>
+<dt><strong>*usage_difference</strong></dt><dd><p>Will calculate the duration difference between two field names defined in the <em>Value</em>. If the number of fields in the <em>Value</em> are different than 2, it will error.</p>
+</dd>
+<dt><strong>*sum</strong></dt><dd><p>Will sum up the values in the <em>Value</em>.</p>
+</dd>
+<dt><strong>*value_exponent</strong></dt><dd><p>Will compute the exponent of the first field in the <em>Value</em>.</p>
+</dd>
+</dl>
+</dd>
+<dt>Value</dt><dd><p>The value which will be set for <em>Path</em>. It can be a list of RSRParsers capturing even from multiple sources in the same event. If the <em>Value</em> is <em>*remove</em> the field with <em>Path</em> will be removed from <em>Event</em></p>
+</dd>
+</dl>
+</section>
+<section id="inline-attribute">
+<h3>Inline Attribute<a class="headerlink" href="#inline-attribute" title="Permalink to this heading">¶</a></h3>
+<p>In order to facilitate quick attribute definition (without the need of separate <em>AttributeProfile</em>), one can define attributes directly as <em>AttributeIDs</em> following the special format.</p>
+<p>Inline filter format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">attributeType</span><span class="p">:</span><span class="n">attributePath</span><span class="p">:</span><span class="n">attributeValue</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">constant</span><span class="p">:</span><span class="o">*</span><span class="n">req</span><span class="o">.</span><span class="n">RequestType</span><span class="p">:</span><span class="o">*</span><span class="n">prepaid</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="use-cases">
+<h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Fields aliasing
+* Number portability (replacing a dialed number with it’s translation)
+* Roaming (using <em>Category</em> to point out the zone where the user is roaming in so we can apply different rating or  consume out of restricted account bundles).</p></li>
+<li><p>Appending new fields
+* Adding separate header with location information
+* Adding additional rating information (ie: SMS only contains origin+destination, add <em>Tenant</em>, <em>Account</em>, <em>Subject</em>, <em>RequestType</em>)
+* Using as query language (ie: append user password for a given user so we can perform authorization on SIP Proxy side).</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">AttributeS</a><ul>
+<li><a class="reference internal" href="#selection">Selection</a></li>
+<li><a class="reference internal" href="#parameters">Parameters</a><ul>
+<li><a class="reference internal" href="#id2">AttributeS</a></li>
+<li><a class="reference internal" href="#attributeprofile">AttributeProfile</a></li>
+<li><a class="reference internal" href="#attribute">Attribute</a></li>
+<li><a class="reference internal" href="#inline-attribute">Inline Attribute</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#use-cases">Use cases</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="cdre.html"
+                          title="previous chapter">CDRe</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="chargers.html"
+                          title="next chapter">ChargerS</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/attributes.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="chargers.html" title="ChargerS"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cdre.html" title="CDRe"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="architecture.html" >Architecture</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="cgr-engine.html" >cgr-engine</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">AttributeS</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012-2020, ITsysCOM GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Installation &#8212; CGRateS 0.10.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration" href="configuration.html" />
+    <link rel="prev" title="cgr-tester" href="cgr-tester.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cgr-tester.html" title="cgr-tester"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Installation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="installation">
+<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
+<p>CGRateS can be installed via packages as well as Go automated source install.
+We recommend using source installs for advanced users familiar with Go programming and packages for users not willing to be involved in the code building process.</p>
+<section id="using-packages">
+<h2>Using packages<a class="headerlink" href="#using-packages" title="Permalink to this heading">¶</a></h2>
+<p>Depending on the packaged distribution, the following methods are available:</p>
+<section id="debian">
+<h3>Debian<a class="headerlink" href="#debian" title="Permalink to this heading">¶</a></h3>
+<p>There are two main ways of installing the maintained packages:</p>
+<section id="aptitude-repository">
+<h4>Aptitude repository<a class="headerlink" href="#aptitude-repository" title="Permalink to this heading">¶</a></h4>
+<p>Add the gpg key:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">wget</span> <span class="o">-</span><span class="n">O</span> <span class="o">-</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">apt</span><span class="o">.</span><span class="n">cgrates</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">apt</span><span class="o">.</span><span class="n">cgrates</span><span class="o">.</span><span class="n">org</span><span class="o">.</span><span class="n">gpg</span><span class="o">.</span><span class="n">key</span> <span class="o">|</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">key</span> <span class="n">add</span> <span class="o">-</span>
+</pre></div>
+</div>
+<p>Add the repository in apt sources list:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s2">&quot;deb http://apt.cgrates.org/debian/ v0.10 main&quot;</span> <span class="o">|</span> <span class="n">sudo</span> <span class="n">tee</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">sources</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">cgrates</span><span class="o">.</span><span class="n">list</span>
+</pre></div>
+</div>
+<p>Update &amp; install:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">cgrates</span>
+</pre></div>
+</div>
+<p>Once the installation is completed, one should perform the <a class="reference internal" href="#post-install"><span class="std std-ref">post-install</span></a> section in order to have the CGRateS properly set and ready to run.
+After <em>post-install</em> actions are performed, CGRateS will be configured in <strong>/etc/cgrates/cgrates.json</strong> and enabled in <strong>/etc/default/cgrates</strong>.</p>
+</section>
+<section id="manual-installation-of-deb-package-out-of-archive-server">
+<h4>Manual installation of .deb package out of archive server<a class="headerlink" href="#manual-installation-of-deb-package-out-of-archive-server" title="Permalink to this heading">¶</a></h4>
+<p>Run the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">pkg</span><span class="o">.</span><span class="n">cgrates</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">deb</span><span class="o">/</span><span class="n">v0</span><span class="mf">.10</span><span class="o">/</span><span class="n">cgrates_current_amd64</span><span class="o">.</span><span class="n">deb</span>
+<span class="n">dpkg</span> <span class="o">-</span><span class="n">i</span> <span class="n">cgrates_current_amd64</span><span class="o">.</span><span class="n">deb</span>
+</pre></div>
+</div>
+<p>As a side note on <a class="reference external" href="http://pkg.cgrates.org/deb/">http://pkg.cgrates.org/deb/</a> one can find an entire archive of CGRateS packages.</p>
+</section>
+</section>
+<section id="redhat-fedora-centos">
+<h3>Redhat/Fedora/CentOS<a class="headerlink" href="#redhat-fedora-centos" title="Permalink to this heading">¶</a></h3>
+<p>There are two main ways of installing the maintained packages:</p>
+<section id="yum-repository">
+<h4>YUM repository<a class="headerlink" href="#yum-repository" title="Permalink to this heading">¶</a></h4>
+<p>To install CGRateS out of YUM execute the following commands</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">tee</span> <span class="o">-</span><span class="n">a</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">yum</span><span class="o">.</span><span class="n">repos</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">cgrates</span><span class="o">.</span><span class="n">repo</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span> <span class="o">&lt;&lt;</span><span class="n">EOT</span>
+<span class="p">[</span><span class="n">cgrates</span><span class="p">]</span>
+<span class="n">name</span><span class="o">=</span><span class="n">CGRateS</span>
+<span class="n">baseurl</span><span class="o">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">yum</span><span class="o">.</span><span class="n">cgrates</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">yum</span><span class="o">/</span><span class="n">v0</span><span class="mf">.10</span><span class="o">/</span>
+<span class="n">enabled</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">gpgcheck</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">gpgkey</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">yum</span><span class="o">.</span><span class="n">cgrates</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">yum</span><span class="o">.</span><span class="n">cgrates</span><span class="o">.</span><span class="n">org</span><span class="o">.</span><span class="n">gpg</span><span class="o">.</span><span class="n">key</span>
+<span class="n">EOT</span>
+<span class="n">sudo</span> <span class="n">yum</span> <span class="n">update</span>
+<span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">cgrates</span>
+</pre></div>
+</div>
+<p>Once the installation is completed, one should perform the <a class="reference internal" href="#post-install"><span class="std std-ref">post-install</span></a> section in order to have the CGRateS properly set and ready to run.
+After <em>post-install</em> actions are performed, CGRateS will be configured in <strong>/etc/cgrates/cgrates.json</strong> and enabled in <strong>/etc/default/cgrates</strong>.</p>
+</section>
+<section id="manual-installation-of-rpm-package-out-of-archive-server">
+<h4>Manual installation of .rpm package out of archive server<a class="headerlink" href="#manual-installation-of-rpm-package-out-of-archive-server" title="Permalink to this heading">¶</a></h4>
+<p>Run the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">rpm</span> <span class="o">-</span><span class="n">i</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">pkg</span><span class="o">.</span><span class="n">cgrates</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">rpm</span><span class="o">/</span><span class="n">v0</span><span class="mf">.10</span><span class="o">/</span><span class="n">cgrates_current</span><span class="o">.</span><span class="n">rpm</span>
+</pre></div>
+</div>
+<p>As a side note on <a class="reference external" href="http://pkg.cgrates.org/rpm/">http://pkg.cgrates.org/rpm/</a> one can find an entire archive of CGRateS packages.</p>
+</section>
+</section>
+</section>
+<section id="using-source">
+<h2>Using source<a class="headerlink" href="#using-source" title="Permalink to this heading">¶</a></h2>
+<p>For developing CGRateS and switching between its versions, we are using the <strong>go mods feature</strong> introduced in go 1.13.</p>
+<section id="install-go-lang">
+<span id="installgo"></span><h3>Install GO Lang<a class="headerlink" href="#install-go-lang" title="Permalink to this heading">¶</a></h3>
+<p>First we have to setup the GO Lang to our OS. Feel free to download
+the latest GO binary release from <a class="reference external" href="https://golang.org/dl/">https://golang.org/dl/</a>
+In this Tutorial we are going to install Go 1.17.5</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo rm -rf /usr/local/go
+cd /tmp
+wget https://go.dev/dl/go1.17.5.linux-amd64.tar.gz
+sudo tar -xvf go1.17.5.linux-amd64.tar.gz -C /usr/local/
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+</pre></div>
+</div>
+</section>
+<section id="build-cgrates-from-source">
+<h3>Build CGRateS from Source<a class="headerlink" href="#build-cgrates-from-source" title="Permalink to this heading">¶</a></h3>
+<p>Configure the project with the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>go get github.com/cgrates/cgrates
+cd $HOME/go/src/github.com/cgrates/cgrates
+./build.sh
+</pre></div>
+</div>
+</section>
+<section id="create-debian-ubuntu-packages-from-source">
+<h3>Create Debian / Ubuntu Packages from Source<a class="headerlink" href="#create-debian-ubuntu-packages-from-source" title="Permalink to this heading">¶</a></h3>
+<p>After compiling the source code you are ready to create the .deb packages
+for your Debian like OS. First lets install some dependencies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">build</span><span class="o">-</span><span class="n">essential</span> <span class="n">fakeroot</span> <span class="n">dh</span><span class="o">-</span><span class="n">systemd</span>
+</pre></div>
+</div>
+<p>Finally we are ready to create the system package. Before creation we make
+sure that we delete the old one first.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd $HOME/go/src/github.com/cgrates/cgrates/packages
+rm -rf $HOME/go/src/github.com/cgrates/*.deb
+make deb
+</pre></div>
+</div>
+<p>After some time and maybe some console warnings, your CGRateS package will be ready.</p>
+</section>
+<section id="install-custom-debian-ubuntu-package">
+<h3>Install Custom Debian / Ubuntu Package<a class="headerlink" href="#install-custom-debian-ubuntu-package" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd $HOME/go/src/github.com/cgrates
+sudo dpkg -i cgrates_*.deb
+</pre></div>
+</div>
+</section>
+<section id="generate-rpm-packages-from-source">
+<h3>Generate RPM Packages from Source<a class="headerlink" href="#generate-rpm-packages-from-source" title="Permalink to this heading">¶</a></h3>
+<dl>
+<dt>Prerequisites</dt><dd><ul>
+<li><p><a class="reference internal" href="#installgo"><span class="std std-ref">Install Golang</span></a></p></li>
+<li><p>Git</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">git</span>
+</pre></div>
+</div>
+</li>
+<li><p>RPM</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">rpm</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd>
+</dl>
+<p>Execute the following commands</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd $HOME/go/src/github.com/cgrates/cgrates
+export gitLastCommit=$(git rev-parse HEAD)
+export rpmTag=$(git log -1 --format=%ci | date +%Y%m%d%H%M%S)+$(git rev-parse --short HEAD)
+mkdir -p $HOME/cgr_build/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+wget -P $HOME/cgr_build/SOURCES https://github.com/cgrates/cgrates/archive/$gitLastCommit.tar.gz
+cp $HOME/go/src/github.com/cgrates/cgrates/packages/redhat_fedora/cgrates.spec $HOME/cgr_build/SPECS
+cd $HOME/cgr_build
+rpmbuild -bb --define &quot;_topdir $HOME/cgr_build&quot; SPECS/cgrates.spec
+</pre></div>
+</div>
+</section>
+</section>
+<section id="post-install">
+<span id="id2"></span><h2>Post-install<a class="headerlink" href="#post-install" title="Permalink to this heading">¶</a></h2>
+<section id="database-setup">
+<h3>Database setup<a class="headerlink" href="#database-setup" title="Permalink to this heading">¶</a></h3>
+<p>For its operation CGRateS uses <strong>one or more</strong> database types, depending on its nature, install and configuration being further necessary.</p>
+<p>At present we support the following databases:</p>
+<dl>
+<dt><a class="reference external" href="https://redis.io/">Redis</a></dt><dd><p>Can be used as <a class="reference internal" href="datadb.html#datadb"><span class="std std-ref">DataDB</span></a>.
+Optimized for real-time information access.
+Once installed there should be no special requirements in terms of setup since no schema is necessary.</p>
+</dd>
+<dt><a class="reference external" href="https://dev.mysql.com/">MySQL</a></dt><dd><p>Can be used as <a class="reference internal" href="stordb.html#stordb"><span class="std std-ref">StorDB</span></a>.
+Optimized for CDR archiving and offline Tariff Plan versioning.
+Once MySQL is installed, CGRateS database needs to be set-up out of provided scripts. (example for the paths set-up by debian package)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">cgrates</span><span class="o">/</span><span class="n">storage</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span>
+<span class="o">./</span><span class="n">setup_cgr_db</span><span class="o">.</span><span class="n">sh</span> <span class="n">root</span> <span class="n">CGRateS</span><span class="o">.</span><span class="n">org</span> <span class="n">localhost</span>
+</pre></div>
+</div>
+</dd>
+<dt><a class="reference external" href="https://www.postgresql.org/">PostgreSQL</a></dt><dd><p>Can be used as <a class="reference internal" href="stordb.html#stordb"><span class="std std-ref">StorDB</span></a>.
+Optimized for CDR archiving and offline Tariff Plan versioning.
+Once PostgreSQL is installed, CGRateS database needs to be set-up out of provided scripts (example for the paths set-up by debian package).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">cgrates</span><span class="o">/</span><span class="n">storage</span><span class="o">/</span><span class="n">postgres</span><span class="o">/</span>
+<span class="o">./</span><span class="n">setup_cgr_db</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+</dd>
+<dt><a class="reference external" href="https://www.mongodb.com/">MongoDB</a></dt><dd><p>Can be used as <a class="reference internal" href="datadb.html#datadb"><span class="std std-ref">DataDB</span></a> as well as <a class="reference internal" href="stordb.html#stordb"><span class="std std-ref">StorDB</span></a>.
+It is the first database that can be used to store all kinds of data stored from CGRateS from accounts, tariff plans to cdrs and logs.
+Once MongoDB is installed, CGRateS database needs to be set-up out of provided scripts (example for the paths set-up by debian package)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">cgrates</span><span class="o">/</span><span class="n">storage</span><span class="o">/</span><span class="n">mongo</span><span class="o">/</span>
+<span class="o">./</span><span class="n">setup_cgr_db</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="set-versions-data">
+<h3>Set versions data<a class="headerlink" href="#set-versions-data" title="Permalink to this heading">¶</a></h3>
+<p>Once database setup is completed, we need to write the versions data. To do this, run migrator tool with the parameters specific to your database.</p>
+<p>Sample usage for MySQL:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cgr</span><span class="o">-</span><span class="n">migrator</span> <span class="o">-</span><span class="n">stordb_passwd</span><span class="o">=</span><span class="s2">&quot;CGRateS.org&quot;</span> <span class="o">-</span><span class="n">exec</span><span class="o">=</span><span class="s2">&quot;*set_versions&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#using-packages">Using packages</a><ul>
+<li><a class="reference internal" href="#debian">Debian</a><ul>
+<li><a class="reference internal" href="#aptitude-repository">Aptitude repository</a></li>
+<li><a class="reference internal" href="#manual-installation-of-deb-package-out-of-archive-server">Manual installation of .deb package out of archive server</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#redhat-fedora-centos">Redhat/Fedora/CentOS</a><ul>
+<li><a class="reference internal" href="#yum-repository">YUM repository</a></li>
+<li><a class="reference internal" href="#manual-installation-of-rpm-package-out-of-archive-server">Manual installation of .rpm package out of archive server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-source">Using source</a><ul>
+<li><a class="reference internal" href="#install-go-lang">Install GO Lang</a></li>
+<li><a class="reference internal" href="#build-cgrates-from-source">Build CGRateS from Source</a></li>
+<li><a class="reference internal" href="#create-debian-ubuntu-packages-from-source">Create Debian / Ubuntu Packages from Source</a></li>
+<li><a class="reference internal" href="#install-custom-debian-ubuntu-package">Install Custom Debian / Ubuntu Package</a></li>
+<li><a class="reference internal" href="#generate-rpm-packages-from-source">Generate RPM Packages from Source</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#post-install">Post-install</a><ul>
+<li><a class="reference internal" href="#database-setup">Database setup</a></li>
+<li><a class="reference internal" href="#set-versions-data">Set versions data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="cgr-tester.html"
+                          title="previous chapter">cgr-tester</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="configuration.html"
+                          title="next chapter">Configuration</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/installation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cgr-tester.html" title="cgr-tester"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Installation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012-2020, ITsysCOM GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    </div>
+  </body>
+</html>

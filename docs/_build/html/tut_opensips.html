@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>OpenSIPS Integration Tutorials &#8212; CGRateS 0.10.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Software installation" href="tut_opensips_installs.html" />
+    <link rel="prev" title="Kamailio interaction via evapi module" href="tut_kamailio_evapi.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tut_opensips_installs.html" title="Software installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tut_kamailio_evapi.html" title="Kamailio interaction via evapi module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="tutorials.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">OpenSIPS Integration Tutorials</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="opensips-integration-tutorials">
+<h1><a class="reference external" href="https://opensips.org/">OpenSIPS</a> Integration Tutorials<a class="headerlink" href="#opensips-integration-tutorials" title="Permalink to this heading">¶</a></h1>
+<p>In these tutorials we exemplify a few cases of integration between <a class="reference external" href="https://opensips.org/">OpenSIPS</a> and <a class="reference external" href="http://www.cgrates.org/">CGRateS</a>. We start with common steps, installation and postinstall processes, then we dive into particular configurations, depending on the case we run.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tut_opensips_installs.html">Software installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tut_opensips_installs.html#cgrates">CGRateS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tut_opensips_installs.html#opensips">OpenSIPS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tut_opensips_native.html">OpenSIPS interaction via  own <em>cgrates</em> module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tut_opensips_native.html#scenario">Scenario</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tut_opensips_native.html#creating-opensips-database-for-drouting-module">Creating OpenSIPS database for DRouting module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tut_opensips_native.html#starting-opensips-with-custom-configuration">Starting OpenSIPS with custom configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tut_opensips_native.html#starting-cgrates-with-custom-configuration">Starting <strong>CGRateS</strong> with custom configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tut_opensips_native.html#cdr-processing">CDR processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tut_opensips_native.html#cgrates-usage"><strong>CGRateS</strong> Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tut_cgrates_usage.html"><strong>CGRateS</strong> Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tut_cgrates_usage.html#loading-cgrates-tariff-plans">Loading <strong>CGRateS</strong> Tariff Plans</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tut_cgrates_usage.html#test-calls">Test calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tut_cgrates_usage.html#cdr-exporting">CDR Exporting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tut_cgrates_usage.html#fraud-detection">Fraud detection</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="tut_kamailio_evapi.html"
+                          title="previous chapter">Kamailio interaction via  <em>evapi</em> module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="tut_opensips_installs.html"
+                          title="next chapter">Software installation</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tut_opensips.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="tut_opensips_installs.html" title="Software installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tut_kamailio_evapi.html" title="Kamailio interaction via evapi module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="tutorials.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">OpenSIPS Integration Tutorials</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012-2020, ITsysCOM GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    </div>
+  </body>
+</html>

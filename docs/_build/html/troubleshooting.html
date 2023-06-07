@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Troubleshooting &#8212; CGRateS 0.10.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Troubleshooting</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this heading">¶</a></h1>
+<p>In case of <strong>troubleshooting</strong>, CGRateS can monitor memory profiling and CPU profiling.</p>
+<section id="memory-profiling">
+<h2>Memory Profiling<a class="headerlink" href="#memory-profiling" title="Permalink to this heading">¶</a></h2>
+<section id="creating-the-memory-profile-files">
+<h3>Creating the memory profile files<a class="headerlink" href="#creating-the-memory-profile-files" title="Permalink to this heading">¶</a></h3>
+<p>Firstly, go to the main config directory and run the engine with the flag named <code class="docutils literal notranslate"><span class="pre">`-memprof_dir`</span></code>. For this example, I choosed <code class="docutils literal notranslate"><span class="pre">`tmp`</span></code> directory from my machine.
+Also, there are other flags that we can use:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`-memprof_interval`</span></code> - Time between memory profile saves. By default, the time between writing into files is 5 seconds.
+<code class="docutils literal notranslate"><span class="pre">`-memprof_nrfiles`</span></code>  - Number of memory profile to write. By default, the numbers of files is 1.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cgr</span><span class="o">-</span><span class="n">engine</span> <span class="o">-</span><span class="n">config_path</span><span class="o">=.</span> <span class="o">-</span><span class="n">logger</span><span class="o">=*</span><span class="n">stdout</span> <span class="o">-</span><span class="n">memprof_dir</span><span class="o">=/</span><span class="n">tmp</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>In the running process, this will create a file named <code class="docutils literal notranslate"><span class="pre">`mem1_prof.prof`</span></code>. Let the engine run for some time, and then you can kill the process. When the process is killed, it will create another file named <code class="docutils literal notranslate"><span class="pre">`mem_final.prof`</span></code> containing the final memory profiling information.</p>
+</section>
+<section id="reading-the-memory-profile-files">
+<h3>Reading the memory profile files<a class="headerlink" href="#reading-the-memory-profile-files" title="Permalink to this heading">¶</a></h3>
+<p>Next step is to read properly the memory profiling. We will use the tool from go package, pprof. Go to the directory where the files were written and read the files.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">tmp</span>
+<span class="n">go</span> <span class="n">tool</span> <span class="n">pprof</span> <span class="n">mem1</span><span class="o">.</span><span class="n">prof</span>
+</pre></div>
+</div>
+<p>It will open a console, and to check the memory usage, type <code class="docutils literal notranslate"><span class="pre">`top`</span></code> to see. For more documentation about this tool, we recommand you to read the pprof package documentation from golang, or simply type <code class="docutils literal notranslate"><span class="pre">`help`</span></code>.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#memory-profiling">Memory Profiling</a><ul>
+<li><a class="reference internal" href="#creating-the-memory-profile-files">Creating the memory profile files</a></li>
+<li><a class="reference internal" href="#reading-the-memory-profile-files">Reading the memory profile files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/troubleshooting.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Troubleshooting</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012-2020, ITsysCOM GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>SupplierS &#8212; CGRateS 0.10.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="StatS" href="stats.html" />
+    <link rel="prev" title="ResourceS" href="resources.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="stats.html" title="StatS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="resources.html" title="ResourceS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="architecture.html" >Architecture</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="cgr-engine.html" accesskey="U">cgr-engine</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SupplierS</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="suppliers">
+<span id="id1"></span><h1>SupplierS<a class="headerlink" href="#suppliers" title="Permalink to this heading">¶</a></h1>
+<p><strong>SupplierS</strong> is a standalone subsystem within <strong>CGRateS</strong> responsible to compute a list of suppliers which can be used for a specific event received to process. It is accessed via <a class="reference external" href="https://godoc.org/github.com/cgrates/cgrates/apier/">CGRateS RPC APIs</a>.</p>
+<p>As most of the other subsystems, it is performance oriented, stored inside <em>DataDB</em> but cached inside the <em>cgr-engine</em> process.
+Caching can be done dynamically/on-demand or at start-time/precached and it is configurable within <em>cache</em> section in the <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">JSON configuration</span></a>.</p>
+<section id="processing-logic">
+<h2>Processing logic<a class="headerlink" href="#processing-logic" title="Permalink to this heading">¶</a></h2>
+<p>When a new <em>Event</em> is received, <strong>SupplierS</strong> will pass it to <a class="reference internal" href="filters.html#filters"><span class="std std-ref">FilterS</span></a> in order to find all <a class="reference internal" href="#supplierprofile"><span class="std std-ref">SupplierProfiles</span></a> matching the <em>Event</em>.</p>
+<p>As a result of the selection process we will get a single <a class="reference internal" href="#supplierprofile"><span class="std std-ref">SupplierProfile</span></a> matching the <em>Event</em>, is active at the <em>EventTime</em> and has a higher priority than the other matching <a class="reference internal" href="#supplierprofile"><span class="std std-ref">SupplierProfiles</span></a>.</p>
+<p>Depending on the <em>Strategy</em> defined in the <em>SupplierProfile</em>, further steps will be taken (ie: query cost, stats, ordering) for each of the individual <em>SupplierIDs</em> defined within the <em>SupplierProfile</em>.</p>
+</section>
+<section id="apis-logic">
+<h2>APIs logic<a class="headerlink" href="#apis-logic" title="Permalink to this heading">¶</a></h2>
+<section id="getsupplierprofilesforevent">
+<h3>GetSupplierProfilesForEvent<a class="headerlink" href="#getsupplierprofilesforevent" title="Permalink to this heading">¶</a></h3>
+<p>Given the <em>Event</em> it will return a list of ordered <em>SupplierProfiles</em> matching at the <em>EventTime</em>.</p>
+<p>This API is useful to test configurations.</p>
+</section>
+<section id="getsuppliers">
+<h3>GetSuppliers<a class="headerlink" href="#getsuppliers" title="Permalink to this heading">¶</a></h3>
+<p>Will return a list of <em>Suppliers</em> from within a <em>SupplierProfile</em> ordered based on <em>Strategy</em>.</p>
+</section>
+</section>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h2>
+<section id="id2">
+<h3>SupplierS<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<p><strong>SupplierS</strong> is the <strong>CGRateS</strong> component responsible for handling the <em>SupplierProfiles</em>.</p>
+<p>It is configured within <strong>suppliers</strong> section from <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">JSON configuration</span></a> via the following parameters:</p>
+<dl class="simple">
+<dt>enabled</dt><dd><p>Will enable starting of the service. Possible values: &lt;true|false&gt;.</p>
+</dd>
+<dt>indexed_selects</dt><dd><p>Enable profile matching exclusively on indexes. If not enabled, the <em>SupplierProfiles</em> are checked one by one which for a larger number can slow down the processing time. Possible values: &lt;true|false&gt;.</p>
+</dd>
+<dt>string_indexed_fields</dt><dd><p>Query string indexes based only on these fields for faster processing. If commented out, each field from the event will be checked against indexes. If defined as empty list, no fields will be checked.</p>
+</dd>
+<dt>prefix_indexed_fields</dt><dd><p>Query prefix indexes based only on these fields for faster processing. If defined as empty list, no fields will be checked.</p>
+</dd>
+<dt>nested_fields</dt><dd><p>Applied when all event fields are checked against indexes, and decides whether subfields are also checked.</p>
+</dd>
+<dt>attributes_conns</dt><dd><p>Connections to AttributeS for altering events before supplier queries. If undefined, fields modifications are disabled.</p>
+</dd>
+<dt>resources_conns</dt><dd><p>Connections to ResourceS for *res sorting, empty to disable functionality.</p>
+</dd>
+<dt>stats_conns</dt><dd><p>Connections to StatS for *stats sorting, empty to disable stats functionality.</p>
+</dd>
+<dt>default_ratio</dt><dd><p>Default ratio used in case of *load strategy</p>
+</dd>
+</dl>
+</section>
+<section id="supplierprofile">
+<span id="id3"></span><h3>SupplierProfile<a class="headerlink" href="#supplierprofile" title="Permalink to this heading">¶</a></h3>
+<p>Contains the configuration for a set of suppliers which will be returned in case of match. Following fields can be defined:</p>
+<dl>
+<dt>Tenant</dt><dd><p>The tenant on the platform (one can see the tenant as partition ID).</p>
+</dd>
+<dt>ID</dt><dd><p>The profile identificator.</p>
+</dd>
+<dt>FilterIDs</dt><dd><p>List of <em>FilterProfileIDs</em> which should match in order to consider the profile matching the event.</p>
+</dd>
+<dt>ActivationInterval</dt><dd><p>The time interval when this profile becomes active. If undefined, the profile is always active. Other options are start time, end time or both.</p>
+</dd>
+<dt>Sorting</dt><dd><p>Sorting strategy applied when ordering the individual <em>Suppliers</em> defined bellow. Possible values are:</p>
+<dl>
+<dt><strong>*weight</strong></dt><dd><p>Classic method of statically sorting the suppliers based on their priority.</p>
+</dd>
+<dt><strong>*lc</strong></dt><dd><p>LeastCost will sort the suppliers based on their cost (lowest cost will have higher priority). If two suppliers will be identical as cost, their <em>Weight</em> will influence the sorting further. If <em>AccountIDs</em> will be specified, bundles can be also used during cost calculation, the only condition is that the bundles should cover complete usage.</p>
+<p>The following fields are mandatory for cost calculation: <em>Account</em>/<em>Subject</em>, <em>Destination</em>, <em>SetupTime</em>. <em>Usage</em> is optional and if present in event, it will be used for the cost calculation.</p>
+</dd>
+<dt><strong>*hc</strong></dt><dd><p>HighestCost will sort the suppliers based on their cost(higher cost will have higher priority). If two suppliers will be identical as cost, their <em>Weight</em> will influence the sorting further.</p>
+<p>The following fields are mandatory for cost calculation: <em>Account</em>/<em>Subject</em>, <em>Destination</em>, <em>SetupTime</em>. <em>Usage</em> is optional and if present in event, it will be used for the cost calculation.</p>
+</dd>
+<dt><strong>*qos</strong></dt><dd><p>QualityOfService strategy will sort the suppliers based on their stats. It takes the StatIDs to check from the supplier <em>StatIDs</em> definition. The metrics used as part of sorting are to be defined in <em>SortingParameters</em> field bellow. If Stats are missing the metrics defined in <em>SortingParameters</em> defaults for those will be populated for order (10000000 as PDD and -1 for the rest).</p>
+</dd>
+<dt><strong>*reas</strong></dt><dd><p>ResourceAscendentSorter will sort the suppliers based on their resource usage, lowest usage giving higher priority. The resources will be queried for each supplier based on it’s <em>ResourceIDs</em> field and the final usage for each supplier will be given by the sum of all the resource usages queried.</p>
+</dd>
+<dt><strong>*reds</strong></dt><dd><p>ResourceDescendentSorter will sort the suppliers based on their resource usage, highest usage giving higher priority. The resources will be queried for each supplier based on it’s <em>ResourceIDs</em> field and the final usage for each supplier will be given by the sum of all the resource usages queried.</p>
+</dd>
+<dt><strong>*load</strong></dt><dd><p>LoadDistribution will sort the suppliers based on their load. An important parameter is the <em>*ratio</em> which is defined as <em>supplierID:Ratio</em> within the SortingParameters. If no supplierID is present within SortingParameters, the system will look for <em>*default</em> or fallback in the configuration to <em>default_ratio</em> within <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">JSON configuration</span></a>. The <em>*ratio</em> will specify the probability to get traffic on a <em>Supplier</em>, the higher the <em>*ratio</em> more chances will a <em>Supplier</em> get for traffic.</p>
+<p>The load will be calculated out of the <em>StatIDs</em> parameter of each <em>Supplier</em>. It is possible to also specify there directly the metric being used in the format <em>StatID:MetricID</em>. If only <em>StatID</em> is instead specified, all metrics will be summed to get the final value.</p>
+</dd>
+</dl>
+</dd>
+<dt>SortingParameters</dt><dd><p>Will define additional parameters for each strategy. Following extra parameters are available(based on strategy):</p>
+<dl class="simple">
+<dt><strong>*qos</strong></dt><dd><p>List of metrics to be used for sorting in order of importance.</p>
+</dd>
+</dl>
+</dd>
+<dt>Weight</dt><dd><p>Priority in case of multiple <em>SupplierProfiles</em> matching an <em>Event</em>. Higher <em>Weight</em> will have more priority.</p>
+</dd>
+<dt>Suppliers</dt><dd><p>List of <a class="reference internal" href="#supplier"><span class="std std-ref">Supplier</span></a> objects which are part of this <em>SupplierProfile</em></p>
+</dd>
+</dl>
+</section>
+<section id="supplier">
+<span id="id4"></span><h3>Supplier<a class="headerlink" href="#supplier" title="Permalink to this heading">¶</a></h3>
+<p>The <em>Supplier</em> represents one supplier within the <em>SupplierProfile</em>. Following parameters are defined for it:</p>
+<dl class="simple">
+<dt>ID</dt><dd><p>Supplier ID, will be returned via APIs. Should be known on the remote side and match some business logic (ie: gateway id or directly an IP address).</p>
+</dd>
+<dt>FilterIDs</dt><dd><p>List of <em>FilterProfileIDs</em> which should match in order to consider the <em>Supplier</em> in use/active.</p>
+</dd>
+<dt>AccountIDs</dt><dd><p>List of account IDs which should be checked in case of some strategies (ie: *lc, *hc).</p>
+</dd>
+<dt>RatingPlanIDs</dt><dd><p>List of RatingPlanIDs which should be checked in case of some strategies (ie: *lc, *hc).</p>
+</dd>
+<dt>ResourceIDs</dt><dd><p>List of ResourceIDs which should be checked in case of some strategies (ie: *reas or *reds).</p>
+</dd>
+<dt>StatIDs</dt><dd><p>List of StatIDs which should be checked in case of some strategies (ie: *qos or *load). Can also be defined as <em>StatID:MetricID</em>.</p>
+</dd>
+<dt>Weight</dt><dd><p>Used for sorting in some strategies (ie: *weight, *lc or *hc).</p>
+</dd>
+<dt>Blocker</dt><dd><p>No more suppliers are provided after this one.</p>
+</dd>
+<dt>SupplierParameters</dt><dd><p>Container which is trasparently passed to the remote client to be used in it’s own logic (ie: gateway prefix stripping or other gateway parameters).</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="use-cases">
+<h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Calculate LCR directly by querying APIs (GetSuppliers).</p></li>
+<li><p>LCR system together with  <a class="reference external" href="https://www.kamailio.org/w/">Kamailio</a> <em>dispatcher</em> module where the <em>SupplierID</em> whithin <em>CGRateS</em> will be used as dispatcher set within <a class="reference external" href="https://www.kamailio.org/w/">Kamailio</a>.</p></li>
+<li><p>LCR system together with <a class="reference external" href="https://opensips.org/">OpenSIPS</a> drouting module where the <em>SupplierID</em> whithin <em>CGRateS</em> will be used as drouting carrier id.</p></li>
+<li><p>LCR system together with <a class="reference external" href="https://freeswitch.com/">FreeSWITCH</a> or <a class="reference external" href="https://www.asterisk.org/">Asterisk</a> where the <em>SupplierID</em> whithin <em>CGRateS</em> will be used as gateway ID within the dialplan of <a class="reference external" href="https://freeswitch.com/">FreesWITCH</a> or <a class="reference external" href="https://www.asterisk.org/">Asterisk</a>.</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">SupplierS</a><ul>
+<li><a class="reference internal" href="#processing-logic">Processing logic</a></li>
+<li><a class="reference internal" href="#apis-logic">APIs logic</a><ul>
+<li><a class="reference internal" href="#getsupplierprofilesforevent">GetSupplierProfilesForEvent</a></li>
+<li><a class="reference internal" href="#getsuppliers">GetSuppliers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parameters">Parameters</a><ul>
+<li><a class="reference internal" href="#id2">SupplierS</a></li>
+<li><a class="reference internal" href="#supplierprofile">SupplierProfile</a></li>
+<li><a class="reference internal" href="#supplier">Supplier</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#use-cases">Use cases</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="resources.html"
+                          title="previous chapter">ResourceS</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="stats.html"
+                          title="next chapter">StatS</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/suppliers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="stats.html" title="StatS"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="resources.html" title="ResourceS"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="architecture.html" >Architecture</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="cgr-engine.html" >cgr-engine</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SupplierS</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012-2020, ITsysCOM GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    </div>
+  </body>
+</html>

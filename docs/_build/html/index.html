@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>CGRateS Documentation &#8212; CGRateS 0.10.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Overview" href="overview.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">CGRateS 0.10.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CGRateS Documentation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cgrates-documentation">
+<h1>CGRateS Documentation<a class="headerlink" href="#cgrates-documentation" title="Permalink to this heading">¶</a></h1>
+<p>Welcome to <a class="reference external" href="http://cgrates.org">CGRateS</a>’s documentation!</p>
+<p><a class="reference external" href="http://cgrates.org">CGRateS</a> is a <em>very fast</em> (<strong>50k+ CPS</strong>) and <em>easily scalable</em> (<strong>load-balancer</strong> + <strong>replication</strong> included) <strong>Real-time Enterprise Billing Suite</strong> targeted especially for ISPs and Telecom Operators (but not only).</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#links">Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cgr-engine.html">cgr-engine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="agents.html">Agents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="diamagent.html">DiameterAgent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="radagent.html">RadiusAgent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="httpagent.html">HTTPAgent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dnsagent.html">DNSAgent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="astagent.html">AsteriskAgent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fsagent.html">FreeSWITCHAgent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kamagent.html">KamailioAgent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ers.html">EventReaderService</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sessions.html">SessionS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sessions.html#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sessions.html#processing-logic">Processing logic</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rals.html">RALs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rals.html#rating">Rating</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rals.html#accounting">Accounting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rals.html#actiontrigger">ActionTrigger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rals.html#action">Action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rals.html#configuration">Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rals.html#use-cases">Use cases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdrs.html">CDRs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cdrs.html#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdrs.html#apis-logic">APIs logic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdrs.html#use-cases">Use cases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdre.html">CDRe</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cdre.html#export-types">Export types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdre.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="attributes.html">AttributeS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="attributes.html#selection">Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="attributes.html#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="attributes.html#use-cases">Use cases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="chargers.html">ChargerS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="chargers.html#derivedcharging">DerivedCharging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="chargers.html#processing-logic">Processing logic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="chargers.html#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="chargers.html#use-cases">Use cases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">ResourceS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="resources.html#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="resources.html#processing-logic">Processing logic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="resources.html#use-cases">Use cases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="suppliers.html">SupplierS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="suppliers.html#processing-logic">Processing logic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="suppliers.html#apis-logic">APIs logic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="suppliers.html#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="suppliers.html#use-cases">Use cases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stats.html">StatS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stats.html#processing-logic">Processing logic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stats.html#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stats.html#use-cases">Use cases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="thresholds.html">ThresholdS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="thresholds.html#processing-logic">Processing logic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="thresholds.html#apis-logic">APIs logic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="thresholds.html#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="thresholds.html#use-cases">Use cases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="filters.html">FilterS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="filters.html#filter-profile">Filter profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="filters.html#filter-rule">Filter rule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="filters.html#inline-filter">Inline Filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="filters.html#subsystem-profiles-selection-based-on-filters">Subsystem profiles selection based on Filters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dispatchers.html">DispatcherS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schedulers.html">SchedulerS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apiers.html">APIerS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="loaders.html">LoaderS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="caches.html">CacheS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datadb.html">DataDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="stordb.html">StorDB</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cgr-console.html">cgr-console</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cgr-loader.html">cgr-loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cgr-migrator.html">cgr-migrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cgr-tester.html">cgr-tester</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-packages">Using packages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#debian">Debian</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="installation.html#aptitude-repository">Aptitude repository</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installation.html#manual-installation-of-deb-package-out-of-archive-server">Manual installation of .deb package out of archive server</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#redhat-fedora-centos">Redhat/Fedora/CentOS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="installation.html#yum-repository">YUM repository</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installation.html#manual-installation-of-rpm-package-out-of-archive-server">Manual installation of .rpm package out of archive server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-source">Using source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#install-go-lang">Install GO Lang</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#build-cgrates-from-source">Build CGRateS from Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#create-debian-ubuntu-packages-from-source">Create Debian / Ubuntu Packages from Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#install-custom-debian-ubuntu-package">Install Custom Debian / Ubuntu Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#generate-rpm-packages-from-source">Generate RPM Packages from Source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#post-install">Post-install</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#database-setup">Database setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#set-versions-data">Set versions data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="administration.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="apicalls.html">API Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ratinglogic.html">Rating logic</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ratinglogic.html#user-balances">User balances</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tut_asterisk.html">Asterisk Integration Tutorials</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tut_asterisk_installs.html">Software installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_asterisk_installs.html#cgrates">CGRateS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_asterisk_installs.html#asterisk">Asterisk</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tut_jitsi_installs.html">SIP UA - Jitsi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tut_asterisk_ari.html">Asterisk interaction via  <em>ARI</em></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_asterisk_ari.html#scenario">Scenario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_asterisk_ari.html#starting-asterisk-with-custom-configuration">Starting Asterisk with custom configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_asterisk_ari.html#starting-cgrates-with-custom-configuration">Starting <strong>CGRateS</strong> with custom configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_asterisk_ari.html#cdr-processing">CDR processing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_asterisk_ari.html#cgrates-usage"><strong>CGRateS</strong> Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tut_cgrates_usage.html"><strong>CGRateS</strong> Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#loading-cgrates-tariff-plans">Loading <strong>CGRateS</strong> Tariff Plans</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#test-calls">Test calls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#cdr-exporting">CDR Exporting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#fraud-detection">Fraud detection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tut_freeswitch.html">FreeSWITCH Integration Tutorials</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tut_freeswitch_installs.html">Software Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_freeswitch_installs.html#cgrates">CGRateS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_freeswitch_installs.html#freeswitch">FreeSWITCH</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tut_jitsi_installs.html">SIP UA - Jitsi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tut_freeswitch_json.html">FreeSWITCH generating <em>http-json</em> CDRs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_freeswitch_json.html#scenario">Scenario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_freeswitch_json.html#starting-freeswitch-with-custom-configuration">Starting FreeSWITCH with custom configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_freeswitch_json.html#starting-cgrates-with-custom-configuration">Starting <strong>CGRateS</strong> with custom configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_freeswitch_json.html#cdr-processing">CDR processing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_freeswitch_json.html#cgrates-usage"><strong>CGRateS</strong> Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tut_cgrates_usage.html"><strong>CGRateS</strong> Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#loading-cgrates-tariff-plans">Loading <strong>CGRateS</strong> Tariff Plans</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#test-calls">Test calls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#cdr-exporting">CDR Exporting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#fraud-detection">Fraud detection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tut_kamailio.html">Kamailio Integration Tutorials</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tut_kamailio_installs.html">Software installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_kamailio_installs.html#cgrates">CGRateS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_kamailio_installs.html#kamailio">Kamailio</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tut_kamailio_evapi.html">Kamailio interaction via  <em>evapi</em> module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_kamailio_evapi.html#scenario">Scenario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_kamailio_evapi.html#starting-kamailio-with-custom-configuration">Starting Kamailio with custom configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_kamailio_evapi.html#starting-cgrates-with-custom-configuration">Starting <strong>CGRateS</strong> with custom configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_kamailio_evapi.html#cdr-processing">CDR processing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_kamailio_evapi.html#cgrates-usage"><strong>CGRateS</strong> Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tut_cgrates_usage.html"><strong>CGRateS</strong> Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#loading-cgrates-tariff-plans">Loading <strong>CGRateS</strong> Tariff Plans</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#test-calls">Test calls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#cdr-exporting">CDR Exporting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#fraud-detection">Fraud detection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tut_opensips.html">OpenSIPS Integration Tutorials</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tut_opensips_installs.html">Software installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_opensips_installs.html#cgrates">CGRateS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_opensips_installs.html#opensips">OpenSIPS</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tut_opensips_native.html">OpenSIPS interaction via  own <em>cgrates</em> module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_opensips_native.html#scenario">Scenario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_opensips_native.html#creating-opensips-database-for-drouting-module">Creating OpenSIPS database for DRouting module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_opensips_native.html#starting-opensips-with-custom-configuration">Starting OpenSIPS with custom configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_opensips_native.html#starting-cgrates-with-custom-configuration">Starting <strong>CGRateS</strong> with custom configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_opensips_native.html#cdr-processing">CDR processing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_opensips_native.html#cgrates-usage"><strong>CGRateS</strong> Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tut_cgrates_usage.html"><strong>CGRateS</strong> Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#loading-cgrates-tariff-plans">Loading <strong>CGRateS</strong> Tariff Plans</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#test-calls">Test calls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#cdr-exporting">CDR Exporting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tut_cgrates_usage.html#fraud-detection">Fraud detection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="miscellaneous.html">Miscellaneous</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="freeswitch.html">FreeSWITCH integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="freeswitch.html#sessionmanager">SessionManager</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="overview.html"
+                          title="next chapter">Overview</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">CGRateS 0.10.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CGRateS Documentation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012-2020, ITsysCOM GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    </div>
+  </body>
+</html>

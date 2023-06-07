@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Rating logic &#8212; CGRateS 0.10.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorials.html" />
+    <link rel="prev" title="API Calls" href="apicalls.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tutorials.html" title="Tutorials"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="apicalls.html" title="API Calls"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="advanced.html" accesskey="U">Advanced Topics</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Rating logic</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="rating-logic">
+<h1>Rating logic<a class="headerlink" href="#rating-logic" title="Permalink to this heading">¶</a></h1>
+<p>Let’s start with the most important function: finding the cost of a certain call.</p>
+<p>The call information comes to CGRateS having the following vital information like  subject, destination, start time and end time. The engine will look up the database for the rates applicable to the received subject and destination.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span> <span class="n">CallDescriptor</span> <span class="n">struct</span> <span class="p">{</span>
+       <span class="n">Direction</span>
+       <span class="n">ToR</span>
+       <span class="n">Tenant</span><span class="p">,</span> <span class="n">Subject</span><span class="p">,</span> <span class="n">Account</span><span class="p">,</span> <span class="n">Destination</span>
+       <span class="n">TimeStart</span><span class="p">,</span> <span class="n">TimeEnd</span>
+       <span class="n">LoopIndex</span>       <span class="o">//</span> <span class="n">indicates</span> <span class="n">the</span> <span class="n">position</span> <span class="n">of</span> <span class="n">this</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">cost</span> <span class="n">request</span> <span class="n">loop</span>
+       <span class="n">CallDuration</span>    <span class="o">//</span> <span class="n">the</span> <span class="n">call</span> <span class="n">duration</span> <span class="n">so</span> <span class="n">far</span> <span class="p">(</span><span class="n">partial</span> <span class="ow">or</span> <span class="n">final</span><span class="p">)</span>
+       <span class="n">FallbackSubject</span> <span class="o">//</span> <span class="n">the</span> <span class="n">subject</span> <span class="n">to</span> <span class="n">check</span> <span class="k">for</span> <span class="n">destination</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span> <span class="n">on</span> <span class="n">primary</span> <span class="n">subject</span>
+       <span class="n">RatingPlans</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When the session manager receives a call start event it will first check if the call is prepaid or postpaid. If the call is postpaid than the cost will be determined only once at the end of the call but if the call is prepaid there will be a debit operation every X seconds (X is configurable).</p>
+<p>In prepaid case the rating engine will have to set rates for multiple parts of the call so the <em>LoopIndex</em> in the above structure will help the engine add the connect fee only to the first part. The <em>CallDuration</em> attribute is used to set the right rate in case the rates database has different costs for the different parts of a call e.g. first minute is more expensive (we can also define the minimum rate unit).</p>
+<p>The <strong>FallbackSubject</strong> is used in case the initial call subject is not found in the rating profiles list (more on this later in this chapter).</p>
+<p>What are the activation periods?</p>
+<blockquote>
+<div><p>At one given time there is a set of prices that applay to different time intervals when a call can be made. In CGRateS one can define multiple such sets that will become active in various point of time called activation time. The activation period is a structure describing different prices for a call on different intervals of time. This structure has an activation time, which specifies the active prices for a period of time by one ore more (usually more than one) rate intervals.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span> <span class="n">RateInterval</span> <span class="n">struct</span> <span class="p">{</span>
+       <span class="n">Years</span>
+       <span class="n">Months</span>
+       <span class="n">MonthDays</span>
+       <span class="n">WeekDays</span>
+       <span class="n">StartTime</span><span class="p">,</span> <span class="n">EndTime</span>
+       <span class="n">Weight</span><span class="p">,</span> <span class="n">ConnectFee</span>
+       <span class="n">Prices</span>
+       <span class="n">RoundingMethod</span>
+       <span class="n">RoundingDecimals</span>
+<span class="p">}</span>
+
+<span class="nb">type</span> <span class="n">Price</span> <span class="n">struct</span> <span class="p">{</span>
+       <span class="n">GroupIntervalStart</span>
+       <span class="n">Value</span>
+       <span class="n">RateIncrement</span>
+       <span class="n">RateUnit</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>An <strong>RateInterval</strong> specifies the Month, the MonthDay, the WeekDays, the StartTime and the EndTime when the RateInterval’s price profile is in effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The RateInterval {“Month”: [1], “WeekDays”:[1,2,3,4,5], “StartTime”:”18:00:00”} specifies the <em>Price</em> for the first month of each year from Monday to Friday starting 18:00. Most structure elements are optional and they can be combined in any way it makes sense. If an element is omitted it means it is zero or any.</p>
+</dd>
+</dl>
+<p>The <em>ConnectFee</em> specifies the connection price for the call if this interval is the first one of the call.</p>
+<p>The <em>Weight</em> will establish which interval will set the price for a call segment if more then one applies to it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Let’s assume there is an interval defining price for the weekdays and another interval that defines a special holiday rates. As that holiday is also one of the regular weekdays than both intervals are applicable to a call made on that day so the interval with the smaller Weight will give the price for the call in question. If both intervals have the same Weight than the interval with the smaller price wins. It is, however, a good practice to set the Weight for the defined intervals.</p>
+</dd>
+</dl>
+<p>The <em>RoundingMethod</em> and the <em>RoundingDecimals</em> will adjust the price using the specified function and number of decimals (more on this in the rates definition chapter).</p>
+<p>The <strong>Price</strong> structure defines the start (<em>GroupIntervalStart</em>) of a section of a call with a specified rate <em>Value</em> per <em>RateUnit</em> diving and rounding the section in <em>RateIncrement</em> subsections.</p>
+<p>So when there is a need to define new sets of prices just define new RatingPlans with the activation time set to the moment when it becomes active.</p>
+<p>Let’s get back to the engine. When a GetCost or Debit call comes to the engine it will try to match the best rating profile for the given <em>Direction</em>, <em>Tenant</em>, <em>ToR</em> and <em>Subject</em> using the longest <em>Subject</em> prefix method or using the <em>FallbackSubject</em> if not found. The rating profile contains the activation periods that might apply to the call in question.</p>
+<p>At this point in rating process the engine will start splitting the call into various time spans using the following criterias:</p>
+<ol class="arabic simple">
+<li><p>Minute Balances: first it will handle the call information to the originator user acount to be split by available minute balances. If the user has free or special price minutes for the call destination they will be consumed by the call.</p></li>
+<li><p>Activation periods: if there were not enough special price minutes available than the engine will check if the call spans over multiple activation periods (the call starts in initial rates period and continues in another).</p></li>
+<li><p>RateIntervals: for each activation period that apply to the call the engine will select the best rate intervals that apply.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span> <span class="n">TimeSpan</span> <span class="n">struct</span> <span class="p">{</span>
+       <span class="n">TimeStart</span><span class="p">,</span> <span class="n">TimeEnd</span>
+       <span class="n">Cost</span>
+       <span class="n">RatingPlan</span>
+       <span class="n">RateInterval</span>
+       <span class="n">MinuteInfo</span>
+       <span class="n">CallDuration</span>  <span class="o">//</span> <span class="n">the</span> <span class="n">call</span> <span class="n">duration</span> <span class="n">so</span> <span class="n">far</span> <span class="n">till</span> <span class="n">TimeEnd</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The result of this splitting will be a list of <em>TimeSpan</em> structures each having attached the MinuteInfo or the RateInterval that gave the price for it. The <em>CallDuration</em> attribute will select the right <em>Price</em> from the <em>RateInterval</em> <em>Prices</em> list. The final cost for the call will be the sum of the prices of these times spans plus the <em>ConnectionFee</em> from the first time span of the call.</p>
+<section id="user-balances">
+<h2>User balances<a class="headerlink" href="#user-balances" title="Permalink to this heading">¶</a></h2>
+<p>The user account contains a map of various balances like money, sms, internet traffic, internet time, etc. Each of these lists contains one or more Balance structure that have a wheight and a possible expiration date.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span> <span class="n">UserBalance</span> <span class="n">struct</span> <span class="p">{</span>
+       <span class="n">Type</span>           <span class="o">//</span> <span class="n">prepaid</span><span class="o">-</span><span class="n">postpaid</span>
+       <span class="n">BalanceMap</span>
+       <span class="n">UnitCounters</span>
+       <span class="n">ActionTriggers</span>
+<span class="p">}</span>
+
+<span class="nb">type</span> <span class="n">Balance</span> <span class="n">struct</span> <span class="p">{</span>
+       <span class="n">Value</span>
+       <span class="n">ExpirationDate</span>
+       <span class="n">Weight</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>CGRateS treats special priced or free minutes different from the rest of balances. They will be called free minutes further on but they can have a special price.</p>
+<p>The free minutes must be handled a little differently because usually they are grouped by specific destinations (e.g. national minutes, ore minutes in the same network). So they are grouped in balances and when a call is made the engine checks all applicable balances to consume minutes according to that call.</p>
+<p>When a call cost needs to be debited these minute balances will be queried for call destination first. If the user has special minutes for the specific destination those minutes will be consumed according to call duration.</p>
+<p>A standard debit operation consist of selecting a certaing balance type and taking all balances from that list in the weight order to be debited till the total amount is consumed.</p>
+<p>CGRateS provide api for adding/substracting user’s money credit. The prepaid and postpaid are uniformly treated except that the prepaid is checked to be always greater than zero and the postpaid can go bellow zero.</p>
+<p>Both prepaid and postpaid can have a limited number of free SMS and Internet traffic per month and this budget is replenished at regular intervals based on the user tariff plan or as the user buys more free SMSs (for example).</p>
+<p>Another special feature allows user to get a better price as the call volume increases each month. This can be added on one ore more thresholds so the more he/she talks the cheaper the calls.</p>
+<p>Finally bonuses can be rewarded to users who received a certain volume of calls.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Rating logic</a><ul>
+<li><a class="reference internal" href="#user-balances">User balances</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="apicalls.html"
+                          title="previous chapter">API Calls</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="tutorials.html"
+                          title="next chapter">Tutorials</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ratinglogic.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="tutorials.html" title="Tutorials"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="apicalls.html" title="API Calls"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CGRateS 0.10.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="advanced.html" >Advanced Topics</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Rating logic</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012-2020, ITsysCOM GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    </div>
+  </body>
+</html>
