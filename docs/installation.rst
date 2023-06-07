@@ -23,21 +23,24 @@ There are two primary ways to install the maintained packages:
 Aptitude Repository 
 ~~~~~~~~~~~~~~~~~~~
 
-You can download and add the GPG key, add the repository to your apt sources list, update your system, and install CGRateS using the following commands:
+You can install CGRateS using the following commands:
 
 ::
 
+    # Install dependencies
+    sudo apt-get install wget gnupg -y
     # Download GPG Key
     wget https://apt.cgrates.org/apt.cgrates.org.gpg.key -O apt.cgrates.org.gpg.key
     # Verify the key before proceeding
+    gpg --verify apt.cgrates.org.gpg.key
     # Move the key to the trusted area
     sudo mv apt.cgrates.org.gpg.key /etc/apt/trusted.gpg.d/apt.cgrates.org.asc
     # Add the repository to the apt sources list
     echo "deb http://apt.cgrates.org/debian/ v0.10 main" | sudo tee /etc/apt/sources.list.d/cgrates.list
-    # Update the system
-    sudo apt-get update
+    # Update system repository
+    sudo apt-get update -y
     # Install CGRateS
-    sudo apt-get install cgrates
+    sudo apt-get install cgrates -y
 
 Upon the completion of the installation, it is necessary to perform the :ref:`post-install <post_install>` steps to set up CGRateS properly and prepare it to run. After completing the *post-install* process, CGRateS will be configured in **/etc/cgrates/cgrates.json** and enabled in **/etc/default/cgrates**.
 
