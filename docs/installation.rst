@@ -8,7 +8,11 @@
 Installation
 ============
 
-You can install CGRateS using packages or by running an automated Go source installation. We recommend package installation for those who prefer not to engage in the code building process. Advanced users familiar with Go programming may prefer source installation.
+.. contents::
+   :local:
+   :depth: 2
+
+CGRateS can be installed either via packages or through an automated Go source installation. We recommend the latter for advanced users familiar with Go programming, and package installations for those not wanting to engage in the code building process.
 
 After completing the installation, you need to perform the :ref:`post-install configuration <post_install>` steps to set up CGRateS properly and prepare it to run. After these steps, CGRateS will be configured in **/etc/cgrates/cgrates.json** and enabled in **/etc/default/cgrates**.
 
@@ -37,7 +41,7 @@ You can add the CGRateS repository to your system's sources list as follows:
    sudo apt-get update -y
    sudo apt-get install cgrates -y
 
-Alternatively, you can manually install the .deb package as follows:
+Alternatively, you can manually install the desired .deb package as follows:
 
 .. code-block:: bash
 
@@ -93,23 +97,23 @@ Configure the project using the following commands:
 
 .. code-block:: bash
 
-   mkdir -p ~/go/src/github.com/cgrates
-   git clone https://github.com/cgrates/cgrates.git ~/go/src/github.com/cgrates/
+   mkdir -p ~/go/src/github.com/cgrates/cgrates
+   git clone https://github.com/cgrates/cgrates.git ~/go/src/github.com/cgrates/cgrates
    cd ~/go/src/github.com/cgrates/cgrates
 
    # Compile the binaries and move them to $GOPATH/bin
    ./build.sh
 
    # Create a symbolic link to the data folder
-   ln -s ~/go/src/github.com/cgrates/cgrates/data /usr/share/cgrates
+   sudo ln -s ~/go/src/github.com/cgrates/cgrates/data /usr/share/cgrates
 
    # Make cgr-engine binary available system-wide
-   ln -s ~/go/bin/cgr-engine /usr/local/bin/cgr-engine
+   sudo ln -s ~/go/bin/cgr-engine /usr/local/bin/cgr-engine
 
    # Optional: Additional useful symbolic links
-   ln -s ~/go/bin/cgr-loader /usr/local/bin/cgr-loader
-   ln -s ~/go/bin/cgr-migrator /usr/local/bin/cgr-migrator
-   ln -s ~/go/bin/cgr-console /usr/local/bin/cgr-console
+   sudo ln -s ~/go/bin/cgr-loader /usr/local/bin/cgr-loader
+   sudo ln -s ~/go/bin/cgr-migrator /usr/local/bin/cgr-migrator
+   sudo ln -s ~/go/bin/cgr-console /usr/local/bin/cgr-console
 
 Creating Your Own Packages
 --------------------------
@@ -190,7 +194,7 @@ Currently, we support the following databases:
 .. code-block:: bash
 
    cd /usr/share/cgrates/storage/postgres/
-   sudo ./setup_cgr_db.sh
+   ./setup_cgr_db.sh
 
 `MongoDB`_
   Can be used as :ref:`DataDB` as well as :ref:`StorDB`.
@@ -200,7 +204,7 @@ Currently, we support the following databases:
 .. code-block:: bash
 
    cd /usr/share/cgrates/storage/mongo/
-   sudo ./setup_cgr_db.sh
+   ./setup_cgr_db.sh
 
 Set Versions Data
 ^^^^^^^^^^^^^^^^^
