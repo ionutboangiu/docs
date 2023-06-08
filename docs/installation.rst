@@ -19,7 +19,7 @@ After completing the installation, you need to perform the :ref:`post-install co
 Package Installation
 --------------------
 
-The installation method varies based on the distribution package:
+Package installation method varies according to the Linux distribution:
 
 Debian or Debian-based Distributions 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -32,7 +32,8 @@ You can add the CGRateS repository to your system's sources list as follows:
    sudo apt-get install wget gnupg -y
 
    # Download and move the GPG Key to the trusted area
-   sudo wget https://apt.cgrates.org/apt.cgrates.org.gpg.key -O /etc/apt/trusted.gpg.d/apt.cgrates.org.asc
+   wget https://apt.cgrates.org/apt.cgrates.org.gpg.key -O apt.cgrates.org.asc
+   sudo mv apt.cgrates.org.asc /etc/apt/trusted.gpg.d/
 
    # Add the repository to the apt sources list
    echo "deb http://apt.cgrates.org/debian/ v0.10 main" | sudo tee /etc/apt/sources.list.d/cgrates.list
@@ -41,19 +42,20 @@ You can add the CGRateS repository to your system's sources list as follows:
    sudo apt-get update -y
    sudo apt-get install cgrates -y
 
-Alternatively, you can manually install the desired .deb package as follows:
+Alternatively, you can manually install a specific .deb package as follows:
 
 .. code-block:: bash
 
    wget http://pkg.cgrates.org/deb/v0.10/cgrates_current_amd64.deb
-   sudo apt install ./cgrates_current_amd64.deb
+   sudo dpkg -i ./cgrates_current_amd64.deb
 
-Note: You can find a complete archive of CGRateS packages at http://pkg.cgrates.org/deb/.
+.. note::
+   A complete archive of CGRateS packages is available at http://pkg.cgrates.org/deb/.
 
 Redhat-based Distributions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can also add the CGRateS repository to your system's sources list as follows:
+For .rpm distros, we are using copr to manage the CGRateS packages:
 
 .. code-block:: bash
 
@@ -61,13 +63,14 @@ You can also add the CGRateS repository to your system's sources list as follows
    sudo dnf copr enable cgrates/master
    sudo dnf install -y cgrates
 
-To install an earlier version of the package, run:
+To install a specific version of the package, run:
 
 .. code-block:: bash
 
    sudo dnf install -y cgrates-<version>.x86_64
 
-Note: The entire archive of CGRateS rpm packages can be found at https://copr.fedorainfracloud.org/coprs/cgrates/v0.10/packages/.
+.. note::
+   The entire archive of CGRateS rpm packages is available at https://copr.fedorainfracloud.org/coprs/cgrates/v0.10/packages/.
 
 Building from Source
 --------------------
@@ -118,7 +121,7 @@ Configure the project using the following commands:
 Creating Your Own Packages
 --------------------------
 
-After compiling the source code, you may choose to build your own packages.
+After compiling the source code, you may choose to create your own packages.
 
 For Debian-based distros:
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -135,14 +138,15 @@ For Debian-based distros:
 
    make deb
 
-You might see some console warnings, but they can safely be ignored.
+.. note::
+   You might see some console warnings, which can be safely ignored.
 
-To install it, run:
+To install the generated package, run:
 
 .. code-block:: bash
 
    cd ~/go/src/github.com/cgrates
-   sudo apt install cgrates_*.deb
+   sudo dpkg -i cgrates_*.deb
 
 For Redhat-based distros:
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -167,19 +171,15 @@ Post-install Configuration
 Database Setup
 ^^^^^^^^^^^^^^
 
-CGRateS uses one or more database types for operation, depending on its nature, install, and configuration.
+CGRateS supports multiple database types for various operations, based on your installation and configuration.
 
 Currently, we support the following databases:
 
 `Redis`_
-  Can be used as :ref:`DataDB`.
-  Optimized for real-time information access.
-  Once installed, no special requirements for setup are necessary since no schema is necessary.
+  This can be used as :ref:`DataDB`. It is optimized for real-time information access. Post-installation, no additional setup is required as Redis doesn't require a specific schema.
 
 `MySQL`_
-  Can be used as :ref:`StorDB`.
-  Optimized for CDR archiving and offline Tariff Plan versioning.
-  After MySQL is installed, you need to set up the CGRateS database using the provided scripts. 
+  This can be used as :ref:`StorDB` and is optimized for CDR archiving and offline Tariff Plan versioning. Post-installation, you need to set up the CGRateS database using the provided scripts:
 
 .. code-block:: bash
 
@@ -187,9 +187,7 @@ Currently, we support the following databases:
    sudo ./setup_cgr_db.sh root CGRateS.org localhost
 
 `PostgreSQL`_
-  Can be used as :ref:`StorDB`.
-  Optimized for CDR archiving and offline Tariff Plan versioning.
-  After PostgreSQL is installed, you need to set up the CGRateS database using the provided scripts. Below is an example of the paths set up by the debian package:
+  Like MySQL, PostgreSQL can be used as :ref:`StorDB`. Post-installation, you need to set up the CGRateS database using the provided scripts:
 
 .. code-block:: bash
 
@@ -197,9 +195,7 @@ Currently, we support the following databases:
    ./setup_cgr_db.sh
 
 `MongoDB`_
-  Can be used as :ref:`DataDB` as well as :ref:`StorDB`.
-  MongoDB is the first database that can store all kinds of data from CGRateS from accounts, tariff plans to CDRs, and logs.
-  After MongoDB is installed, you need to set up the CGRateS database using the provided scripts.
+  MongoDB can be used as both :ref:`DataDB` and :ref:`StorDB`. This is the first database that can store all types of data from CGRateS - from accounts, tariff plans to CDRs and logs. Post-installation, you need to set up the CGRateS database using the provided scripts:
 
 .. code-block:: bash
 
