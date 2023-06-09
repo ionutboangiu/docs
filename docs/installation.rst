@@ -124,7 +124,7 @@ Creating Your Own Packages
 After compiling the source code, you may choose to create your own packages.
 
 For Debian-based distros:
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
 
