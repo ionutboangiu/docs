@@ -76,14 +76,15 @@ Building from Source
 --------------------
 
 Prerequisites:
+^^^^^^^^^^^^^^
 
-- Git
+- **Git**
 
 .. code-block:: bash
 
    sudo apt install git
 
-- Go (refer to the official Go installation docs: https://go.dev/doc/install)
+- **Go** (refer to the official Go installation docs: https://go.dev/doc/install)
 
 To install the latest Go version at the time of writing this documentation, run:
 
@@ -96,7 +97,8 @@ To install the latest Go version at the time of writing this documentation, run:
    sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
    export PATH=$PATH:/usr/local/go/bin
 
-Configure the project using the following commands:
+Configuration:
+^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
