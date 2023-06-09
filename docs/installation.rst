@@ -60,7 +60,7 @@ For .rpm distros, we are using copr to manage the CGRateS packages:
 .. code-block:: bash
 
    sudo dnf install -y dnf-plugins-core
-   sudo dnf copr enable cgrates/master
+   sudo dnf copr enable cgrates/v0.10
    sudo dnf install -y cgrates
 
 To install a specific version of the package, run:
