@@ -72,8 +72,8 @@ To install a specific version of the package, run:
 .. note::
    The entire archive of CGRateS rpm packages is available at https://copr.fedorainfracloud.org/coprs/cgrates/v0.10/packages/.
 
-Building from Source
---------------------
+Installing from Source
+----------------------
 
 Prerequisites:
 ^^^^^^^^^^^^^^
@@ -97,7 +97,7 @@ To install the latest Go version at the time of writing this documentation, run:
    sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
    export PATH=$PATH:/usr/local/go/bin
 
-Configuration:
+Installation:
 ^^^^^^^^^^^^^^
 
 .. code-block:: bash
