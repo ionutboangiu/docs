@@ -124,7 +124,7 @@ Creating Your Own Packages
 After compiling the source code, you may choose to create your own packages.
 
 For Debian-based distros:
-~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -149,7 +149,7 @@ To install the generated package, run:
    sudo dpkg -i cgrates_*.deb
 
 For Redhat-based distros:
-~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
