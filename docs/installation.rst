@@ -14,7 +14,7 @@ Installation
 
 CGRateS can be installed either via packages or through an automated Go source installation. We recommend the latter for advanced users familiar with Go programming, and package installations for those not wanting to engage in the code building process.
 
-After completing the installation, you need to perform the :ref:`post-install configuration <post_install>` steps to set up CGRateS properly and prepare it to run. After these steps, CGRateS will be configured in **/etc/cgrates/cgrates.json** and enabled in **/etc/default/cgrates**.
+After completing the installation, you need to perform the :ref:`post-install configuration <post_install>` steps to set up CGRateS properly and prepare it to run. After these steps, CGRateS will be configured in **/etc/cgrates/cgrates.json** and the service can be managed using the **systemctl** command.
 
 Package Installation
 --------------------
@@ -98,7 +98,7 @@ To install the latest Go version at the time of writing this documentation, run:
    export PATH=$PATH:/usr/local/go/bin
 
 Installation:
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^
 
 .. code-block:: bash
 
