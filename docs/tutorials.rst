@@ -2,7 +2,7 @@ Tutorials
 =========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
 
    tut_asterisk
    tut_freeswitch
