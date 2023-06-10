@@ -37,8 +37,6 @@ Regarding the communication platforms, click on the tab corresponding to the cho
 
       To install FreeSWITCH and configure it, we have chosen the simplest method using *vanilla* packages.
 
-      Install FreeSWITCH by running the following commands:
-
       .. code-block:: bash
 
          TOKEN=YOURSIGNALWIRETOKEN # Insert your SignalWire Personal Access Token here
@@ -59,7 +57,11 @@ Regarding the communication platforms, click on the tab corresponding to the cho
       .. code-block:: bash
 
          # Install the necessary dependencies
-         sudo apt-get install build-essential libasound2-dev autoconf openssl libssl-dev libxml2-dev libncurses5-dev uuid-dev sqlite3 libsqlite3-dev pkg-config libedit-dev libjansson-dev
+         sudo apt-get install -y build-essential libasound2-dev autoconf \
+                              openssl libssl-dev libxml2-dev \
+                              libncurses5-dev uuid-dev sqlite3 \
+                              libsqlite3-dev pkg-config libedit-dev \
+                              libjansson-dev
 
          # Download Asterisk
          wget https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-20-current.tar.gz -P /tmp
@@ -96,6 +98,7 @@ Regarding the communication platforms, click on the tab corresponding to the cho
    .. group-tab:: OpenSIPS
 
       We got OpenSIPS_ installed via following commands:
+      
       .. code-block:: bash
 
          apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B
