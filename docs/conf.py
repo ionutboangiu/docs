@@ -222,3 +222,5 @@ man_pages = [
 # extensions = ['autoapi.extension']
 # autoapi_type = 'go'
 # autoapi_dirs = ['../apier/v1']
+
+sphinx_tabs_disable_css_loading = True

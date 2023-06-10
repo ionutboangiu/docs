@@ -17,30 +17,63 @@ The setup will consist of setting 6 accounts, as follows:
 
 .. tabs::
 
-   .. tab:: FreeSWITCH
+   .. group-tab:: FreeSWITCH
 
       Installation here:
       ::
 
         sudo apt install freeswitch
 
-   .. tab:: Asterisk
+   .. group-tab:: Asterisk
 
       Install asterisk:
       ::
 
         sudo apt install asterisk
 
-   .. tab:: Kamailio
+   .. group-tab:: Kamailio
 
       Install kama:
       ::
 
         sudo apt install kamailio
 
-   .. tab:: OpenSIPS
+   .. group-tab:: OpenSIPS
 
       Installation for this:
       ::
 
         sudo apt install opensips
+
+
+.. tabs::
+
+   .. group-tab:: FreeSWITCH
+
+      Installation here:
+      ::
+
+        sudo apt install freeswitch
+
+   .. group-tab:: Asterisk
+
+      Install asterisk:
+      ::
+
+        sudo apt install asterisk
+
+   .. group-tab:: Kamailio
+
+      Install kama:
+      ::
+
+        sudo apt install kamailio
+
+   .. group-tab:: OpenSIPS
+
+      Installation for this:
+      ::
+
+        sudo apt install opensips
+
+
