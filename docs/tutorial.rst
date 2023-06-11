@@ -1,6 +1,10 @@
 Tutorial
 ========
 
+.. contents::
+   :local:
+   :depth: 4
+
 In this tutorial, on a Debian 11 (Bullseye) virtual machine, we will do the following together:
 
 1. Set up a SIP Server of your choice. We support the following options:
@@ -314,7 +318,7 @@ Test calls
 Since the user 1001 is marked as *prepaid* inside the telecom switch, calling between 1001 and 1002 should generate pre-auth and prepaid debits which can be checked with *get_account* command integrated within *cgr-console* tool. Charging will be done based on time of day as described in the tariff plan definition above.
 
 .. note::
-   
+
    An important particularity to  note here is the ability of **CGRateS** SessionManager to refund units booked in advance (eg: if debit occurs every 10s and rate increments are set to 1s, the SessionManager will be smart enough to refund pre-booked credits for calls stoped in the middle of debit interval).
 
 Check that 1001 balance is properly deducted, during the call, and moreover considering that general balance has priority over the shared one debits for this call should take place at first out of general balance.
