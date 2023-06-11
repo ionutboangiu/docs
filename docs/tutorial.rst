@@ -4,10 +4,10 @@ Tutorial
 In this tutorial, on a Debian 11 (Bullseye) virtual machine, we will do the following together:
 
 1. Set up a SIP Server of your choice. We support the following options:
-   -  FreeSWITCH
-   -  Asterisk
-   -  Kamailio
-   -  OpenSIPS
+   -  FreeSWITCH_
+   -  Asterisk_
+   -  Kamailio_
+   -  OpenSIPS_
 2. Start a CGRateS instance with the corresponding agent configured. What we call agents are basically components within CGRateS that manage the communication between CGRateS and the SIP Servers.
 3. Configure user accounts as follows:
    -1001 -  prepaid 
@@ -32,11 +32,11 @@ Regarding the SIP Servers, click on the tab corresponding to the choice you made
 
    .. group-tab:: FreeSWITCH
 
-      For detailed information on installing FreeSWITCH on Debian, please refer to its official `installation wiki <https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Installation/Linux/Debian_67240088/>`_.
+      For detailed information on installing FreeSWITCH_ on Debian, please refer to its official `installation wiki <https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Installation/Linux/Debian_67240088/>`_.
 
-      Before installing FreeSWITCH, you need to authenticate by creating a SignalWire Personal Access Token. To generate your personal token, follow the instructions in the `SignalWire official wiki on creating a personal token <https://developer.signalwire.com/freeswitch/freeswitch-explained/installation/howto-create-a-signalwire-personal-access-token_67240087/>`_.
+      Before installing FreeSWITCH_, you need to authenticate by creating a SignalWire Personal Access Token. To generate your personal token, follow the instructions in the `SignalWire official wiki on creating a personal token <https://developer.signalwire.com/freeswitch/freeswitch-explained/installation/howto-create-a-signalwire-personal-access-token_67240087/>`_.
 
-      To install FreeSWITCH and configure it, we have chosen the simplest method using *vanilla* packages.
+      To install FreeSWITCH_ and configure it, we have chosen the simplest method using *vanilla* packages.
 
       .. code-block:: bash
 
@@ -53,7 +53,7 @@ Regarding the SIP Servers, click on the tab corresponding to the choice you made
 
    .. group-tab:: Asterisk
 
-      To install Asterisk, follow these steps:
+      To install Asterisk_, follow these steps:
 
       .. code-block:: bash
 
@@ -87,7 +87,7 @@ Regarding the SIP Servers, click on the tab corresponding to the choice you made
 
    .. group-tab:: Kamailio
 
-      Kamailio can be installed using the commands below, as documented in the `Kamailio Debian Installation Guide <https://kamailio.org/docs/tutorials/devel/kamailio-install-guide-deb/>`_.
+      Kamailio_ can be installed using the commands below, as documented in the `Kamailio Debian Installation Guide <https://kamailio.org/docs/tutorials/devel/kamailio-install-guide-deb/>`_.
 
       .. code-block:: bash
 
@@ -120,19 +120,20 @@ Regarding the SIP Servers, we have prepared custom configurations in advance, as
    .. group-tab:: FreeSWITCH
 
 
-      - FreeSWITCH with *vanilla* configuration adding *mod_json_cdr* for CDR generation. 
+      The FreeSWITCH_ setup consists of:
 
-         - Added configuration for the following users (with configs in *etc/freeswitch/directory/default*): 1001-prepaid, 1002-postpaid, 1003-pseudoprepaid, 1004-rated, 1006-prepaid, 1007-rated.
-         - Have added inside default dialplan CGR own extensions just before routing towards users (found in *etc/freeswitch/dialplan/default.xml*).
+         - *vanilla* configuration + "mod_json_cdr" for CDR generation;
+         - configurations for the following users (found in *etc/freeswitch/directory/default*): 1001-prepaid, 1002-postpaid, 1003-pseudoprepaid, 1004-rated, 1006-prepaid, 1007-rated;
+         - addition of CGRateS' own extensions befoure routing towards users in the dialplan (found in *etc/freeswitch/dialplan/default.xml*).
 
 
-      To start FreeSWITCH_ with custom configuration, used the :
+      To start FreeSWITCH_ with the prepared custom configuration, run:
 
       .. code-block:: bash
 
          /usr/share/cgrates/tutorials/fs_evsock/freeswitch/etc/init.d/freeswitch start
 
-      To verify that FreeSWITCH_ is running, run:
+      To verify that FreeSWITCH_ is running, run the following command:
 
       .. code-block:: bash
 
@@ -141,24 +142,72 @@ Regarding the SIP Servers, we have prepared custom configurations in advance, as
 
    .. group-tab:: Asterisk
 
-      Install asterisk:
-      ::
 
-        sudo apt install asterisk
+      The Asterisk_ setup consists of:
+
+         - *basic-pbx* configuration sample;
+         - configurations for the following users: 1001-prepaid, 1002-postpaid, 1003-pseudoprepaid, 1004-rated, 1007-rated.
+
+
+      To start Asterisk_ with the prepared custom configuration, run:
+
+      .. code-block:: bash
+
+         /usr/share/cgrates/tutorials/asterisk_ari/asterisk/etc/init.d/asterisk start
+      
+
+      To verify that Asterisk_ is running, run the following commands:
+
+      .. code-block:: bash
+
+         asterisk -r -s /tmp/cgr_asterisk_ari/asterisk/run/asterisk.ctl
+         ari show status
 
    .. group-tab:: Kamailio
 
-      Install kama:
-      ::
+      The Kamailio_ setup consists of:
 
-        sudo apt install kamailio
+         - default configuration with small modifications to add **CGRateS** interaction;
+         - for script maintainability and simplicity, we have separated **CGRateS** specific routes in *kamailio-cgrates.cfg* file which is included in main *kamailio.cfg* via include directive;
+         - configurations for the following users: 1001-prepaid, 1002-postpaid, 1003-pseudoprepaid, stored using the CGRateS AttributeS subsystem.
+
+
+      To start Kamailio_ with the prepared custom configuration, run:
+
+      .. code-block:: bash
+
+         /usr/share/cgrates/tutorials/kamevapi/kamailio/etc/init.d/kamailio start
+
+      To verify that Kamailio_ is running, run the following command:
+
+      .. code-block:: bash
+
+         kamctl moni
 
    .. group-tab:: OpenSIPS
 
-      Installation for this:
-      ::
+      The OpenSIPS_ setup consists of:
+         - *residential* configuration;
+         - user accounts configuration not needed since it's enough for them to only be defined within CGRateS;
+         - for simplicity, no authentication was configured (WARNING: Not suitable for production).
+         - creating database for the DRouting module, using the following command:
+            .. code-block:: bash
 
-        sudo apt install opensips
+               opensips-cli -x database create
+               
+
+      To start OpenSIPS_ with the prepared custom configuration, run:
+
+      .. code-block:: bash
+
+         /usr/share/cgrates/tutorials/osips_native/opensips/etc/init.d/opensips start
+
+      To verify that OpenSIPS_ is running, run the following command:
+
+      .. code-block:: bash
+
+         opensipsctl moni
+
 
 
 **CGRateS** will be configured with the following subsystems enabled:
@@ -209,7 +258,7 @@ Just as with the SIP Servers, we have also prepared configurations and init scri
          /usr/share/cgrates/tutorials/osips_native/cgrates/etc/init.d/cgrates start
 
 .. note::
-   If you have chosen OpenSIPS, CGRateS has to be started first since the dependency is reversed.
+   If you have chosen OpenSIPS_, CGRateS has to be started first since the dependency is reversed.
 
 
 Loading **CGRateS** Tariff Plans
@@ -292,7 +341,7 @@ The user 1001 call user 1003 and after 12 seconds the call will be disconnected.
 CDR Processing
 --------------
 
-  - The SIP Server generates a CDR event at the end of each call (i.e., FreeSWITCH via HTTP Post and Kamailio via evapi)
+  - The SIP Server generates a CDR event at the end of each call (i.e., FreeSWITCH_ via HTTP Post and Kamailio_ via evapi)
   - The event is directed towards the port configured inside cgrates.json due to the automatic handler registration built into the SessionS subsystem.
   - The event reaches CGRateS through the SessionS subsystem in close to real-time.
   - Once inside CGRateS, the event is instantly rated and ready for export.
@@ -325,3 +374,10 @@ To verify this mechanism simply add some random units into one account's balance
 
 On the CDRs side we will be able to integrate CdrStats monitors as part of our Fraud Detection system (eg: the increase of average cost for 1001 and 1002 accounts will signal us abnormalities, hence we will be notified via syslog).
 
+
+.. _Zoiper: https://www.zoiper.com/
+.. _Asterisk: http://www.asterisk.org/
+.. _FreeSWITCH: https://freeswitch.com/
+.. _Kamailio: https://www.kamailio.org/w/
+.. _OpenSIPS: https://opensips.org/
+.. _CGRateS: http://www.cgrates.org/
