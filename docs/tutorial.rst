@@ -4,10 +4,10 @@ Tutorial
 In this tutorial, on a Debian 11 (Bullseye) virtual machine, we will do the following together:
 
 1. Set up a SIP Server of your choice. We support the following options:
-   -  FreeSWITCH_
-   -  Asterisk_
-   -  Kamailio_
-   -  OpenSIPS_
+      -  FreeSWITCH_
+      -  Asterisk_
+      -  Kamailio_
+      -  OpenSIPS_
 2. Start a CGRateS instance with the corresponding agent configured. What we call agents are basically components within CGRateS that manage the communication between CGRateS and the SIP Servers.
 3. Configure user accounts as follows:
       -1001 -  prepaid 
