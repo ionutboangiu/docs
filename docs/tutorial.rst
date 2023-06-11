@@ -10,12 +10,12 @@ In this tutorial, on a Debian 11 (Bullseye) virtual machine, we will do the foll
    -  OpenSIPS_
 2. Start a CGRateS instance with the corresponding agent configured. What we call agents are basically components within CGRateS that manage the communication between CGRateS and the SIP Servers.
 3. Configure user accounts as follows:
-   -1001 -  prepaid 
-   -1002 -  postpaid
-   -1003 -  pseudoprepaid 
-   -1004 -  rated 
-   -1006 -  prepaid 
-   -1007 -  rated
+      -1001 -  prepaid 
+      -1002 -  postpaid
+      -1003 -  pseudoprepaid 
+      -1004 -  rated 
+      -1006 -  prepaid 
+      -1007 -  rated
 4. Add balance to the accounts that we will use.
 5. Use Zoiper to make calls between the accounts we configured then check the updated balances. Feel free to use any other SIP UA.
 6. Set up fraud detection.
