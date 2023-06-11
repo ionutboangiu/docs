@@ -17,7 +17,7 @@ In this tutorial, on a Debian 11 (Bullseye) virtual machine, we will do the foll
       -1006 -  prepaid 
       -1007 -  rated
 4. Add balance to the accounts that we will use.
-5. Use Zoiper to make calls between the accounts we configured then check the updated balances. Feel free to use any other SIP UA.
+5. Use Zoiper_ to make calls between the accounts we configured then check the updated balances. Feel free to use any other SIP UA.
 6. Set up fraud detection.
 
 
