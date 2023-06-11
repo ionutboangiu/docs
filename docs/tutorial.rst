@@ -2,6 +2,7 @@ Tutorial
 ========
 
 In this tutorial, on a Debian 11 (Bullseye) virtual machine, we will do the following together:
+
 1. Set up a SIP Server of your choice. We support the following options:
    -  FreeSWITCH
    -  Asterisk
@@ -20,8 +21,8 @@ In this tutorial, on a Debian 11 (Bullseye) virtual machine, we will do the foll
 6. Set up fraud detection.
 
 
-Software Installation:
-----------------------
+Software Installation
+---------------------
 
 *CGRateS* already has a section within this documentation regarding installation. It can be found :ref:`here<installation>`.
 
@@ -107,19 +108,12 @@ Regarding the SIP Servers, click on the tab corresponding to the choice you made
          apt-get update
          sudo apt-get install opensips opensips-mysql-module opensips-cgrates-module opensips-cli
 
-Configuration and initialization:
----------------------------------
+Configuration and initialization
+--------------------------------
 
 This section will be dedicated to configuring both the chosen SIP Server, as well as CGRateS and then get them running.
 
-For both CGRateS and the SIP Servers, we have prepared custom configurations in advance, as well as an init scripts that can be used to start the services using said configurations. It can also be used to stop/restart/check on the status of the services. Another way to do that would be to copy the configuration in the default folder, where the Server will be searching for the configuration before starting, with it usually being /etc/<software name>. CGRateS can also be started using the cgr-engine binary, like so:
-
-.. code-block:: bash
-
-         cgr-engine -config_path=<path_to_config> -logger=*stdout
-
-.. note::
-   The logger flag from the command above is optional, it's just more convenient for us to check for logs in the terminal that cgrates was started in rather than checking the syslog.
+Regarding the SIP Servers, we have prepared custom configurations in advance, as well as an init scripts that can be used to start the services using said configurations. It can also be used to stop/restart/check on the status of the services. Another way to do that would be to copy the configuration in the default folder, where the Server will be searching for the configuration before starting, with it usually being /etc/<software name>.
 
 .. tabs::
 
@@ -178,6 +172,15 @@ For both CGRateS and the SIP Servers, we have prepared custom configurations in 
  - **ThresholdS**: monitoring and reacting to events coming from above subsystems;
  - **CDRe**: exporting rated CDRs from CGR StorDB (export path: */tmp*).
 
+Just as with the SIP Servers, we have also prepared configurations and init scripts for CGRateS. And just as well, you can manage the CGRateS service using systemctl if you prefer. You can even start it using the cgr-engine binary, like so:
+
+ .. code-block:: bash
+
+         cgr-engine -config_path=<path_to_config> -logger=*stdout
+
+.. note::
+   The logger flag from the command above is optional, it's usually more convenient for us to check for logs in the terminal that cgrates was started in rather than checking the syslog.
+
 
 .. tabs::
 
@@ -206,7 +209,7 @@ For both CGRateS and the SIP Servers, we have prepared custom configurations in 
          /usr/share/cgrates/tutorials/osips_native/cgrates/etc/init.d/cgrates start
 
 .. note::
-   In case of OpenSIPS, CGRateS has to be started first since the dependency is reversed.
+   If you have chosen OpenSIPS, CGRateS has to be started first since the dependency is reversed.
 
 
 Loading **CGRateS** Tariff Plans
@@ -286,10 +289,10 @@ To check that we had debits we use again console command, this time not during t
 ~~~~~~~~~~~~
 The user 1001 call user 1003 and after 12 seconds the call will be disconnected.
 
-CDR Processing Across Different Platforms
------------------------------------------
+CDR Processing
+--------------
 
-  - Generates a CDR event at the end of each call (FreeSWITCH via HTTP Post and Kamailio via evapi)
+  - The SIP Server generates a CDR event at the end of each call (i.e., FreeSWITCH via HTTP Post and Kamailio via evapi)
   - The event is directed towards the port configured inside cgrates.json due to the automatic handler registration built into the SessionS subsystem.
   - The event reaches CGRateS through the SessionS subsystem in close to real-time.
   - Once inside CGRateS, the event is instantly rated and ready for export.
