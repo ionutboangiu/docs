@@ -8,38 +8,50 @@ Tutorial
 Introduction
 ------------
 
-This tutorial provides detailed instructions for setting up a SIP Server and managing communication between the server and the CGRateS instance. 
+This tutorial provides detailed instructions for setting up a SIP Server and managing communication between the server and the CGRateS instance. Although the tutorial is developed and tested on a virtual machine with Debian 11 (Bullseye), the choice of the operating system can be flexible according to the user's preference and comfort.
 
-::Note:: The development and testing of the instructions in this tutorial has been done on a Debian 11 (Bullseye) virtual machine.
+.. note::
+
+   The author of this tutorial used Debian 11 for the development and testing of the instructions.
+
 
 Scenario Overview
 -----------------
 
 The tutorial comprises the following steps:
 
-1. **SIP Server Setup**: Select and install a SIP Server. Supported options include:
-      -  FreeSWITCH_
-      -  Asterisk_
-      -  Kamailio_
-      -  OpenSIPS_
-   
-2. **CGRateS Initialization**: Launch a CGRateS instance with the corresponding agent configured. The term "agent" here refers to a component within CGRateS that manages the communication between CGRateS and the SIP Servers.
+1. SIP Server Setup:
+   Select and install a SIP Server. The tutorial supports the following options:
 
-3. **Account Configuration**: Establish user accounts with specific classifications as follows:
-      -  1001 -  Prepaid 
-      -  1002 -  Postpaid
-      -  1003 -  Pseudoprepaid 
-      -  1004 -  Rated 
-      -  1006 -  Prepaid 
-      -  1007 -  Rated
+   -  FreeSWITCH_
+   -  Asterisk_
+   -  Kamailio_
+   -  OpenSIPS_
 
-4. **Balance Addition**: Allocate suitable balances to the user accounts.
+2. CGRateS Initialization:
+   Launch a CGRateS instance with the corresponding agent configured. In this context, an "agent" refers to a component within CGRateS that manages communication between CGRateS and the SIP Servers.
 
-5. **Call Simulation**: Use Zoiper_ (or any other SIP UA of your preference) to simulate calls between the configured accounts and verify the balance updates post-calls.
+3. Account Configuration:
+   Establish user accounts with specific classifications as follows:
 
-6. **Fraud Detection Setup**: Implement a fraud detection mechanism to ensure the security and integrity of the service.
+   -  1001 -  Prepaid 
+   -  1002 -  Postpaid
+   -  1003 -  Pseudoprepaid 
+   -  1004 -  Rated 
+   -  1006 -  Prepaid 
+   -  1007 -  Rated
 
-As we progress through the tutorial, each step will be elaborated in detail. Let's begin with the SIP Server Setup.
+4. Balance Addition:
+   Allocate suitable balances to the user accounts.
+
+5. Call Simulation:
+   Use Zoiper_ (or any other SIP UA of your choice) to simulate calls between the configured accounts, and then verify the balance updates post-calls.
+
+6. Fraud Detection Setup:
+   Implement a fraud detection mechanism to secure and maintain the integrity of the service.
+
+As we progress through the tutorial, each step will be elaborated in detail. Let's embark on this journey with the SIP Server Setup.
+
 
 
 Software Installation
