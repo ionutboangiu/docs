@@ -107,8 +107,57 @@ Regarding the communication platforms, click on the tab corresponding to the cho
          apt-get update
          sudo apt-get install opensips opensips-mysql-module opensips-cgrates-module opensips-cli
 
-Configuration:
---------------
+Configuration and initialization:
+---------------------------------
+
+.. tabs::
+
+   .. group-tab:: FreeSWITCH
+
+
+      - FreeSWITCH with *vanilla* configuration adding *mod_json_cdr* for CDR generation. 
+
+         - Added configuration for the following users (with configs in *etc/freeswitch/directory/default*): 1001-prepaid, 1002-postpaid, 1003-pseudoprepaid, 1004-rated, 1006-prepaid, 1007-rated.
+         - Have added inside default dialplan CGR own extensions just before routing towards users (found in *etc/freeswitch/dialplan/default.xml*).
+
+
+      Starting FreeSWITCH_ with custom configuration
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      .. code-block:: bash
+
+         /usr/share/cgrates/tutorials/fs_evsock/freeswitch/etc/init.d/freeswitch start
+
+      To verify that FreeSWITCH_ is running, run:
+
+      .. code-block:: bash
+
+         fs_cli -x status
+
+
+   .. group-tab:: Asterisk
+
+      Install asterisk:
+      ::
+
+        sudo apt install asterisk
+
+   .. group-tab:: Kamailio
+
+      Install kama:
+      ::
+
+        sudo apt install kamailio
+
+   .. group-tab:: OpenSIPS
+
+      Installation for this:
+      ::
+
+        sudo apt install opensips
+
+
+
 
 
 Loading **CGRateS** Tariff Plans
