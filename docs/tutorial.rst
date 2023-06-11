@@ -315,7 +315,7 @@ Now that we have **CGRateS** installed and started with one of the custom config
   - 1001, 1002 will receive 10units of **\*monetary** balance.
 
 
-::
+.. code-block:: bash
 
  cgr-loader -verbose -path=/usr/share/cgrates/tariffplans/tutorial
 
@@ -323,14 +323,14 @@ To verify that all actions successfully performed, we use following *cgr-console
 
 - Make sure all our balances were topped-up:
 
- ::
+ .. code-block:: bash
 
   cgr-console 'accounts Tenant="cgrates.org" AccountIds=["1001"]'
   cgr-console 'accounts Tenant="cgrates.org" AccountIds=["1002"]'
 
 - Query call costs so we can see our calls will have expected costs (final cost will result as sum of *ConnectFee* and *Cost* fields):
 
- ::
+ .. code-block:: bash
  
   cgr-console 'cost Category="call" Tenant="cgrates.org" Subject="1001" Destination="1002" AnswerTime="2014-08-04T13:00:00Z" Usage="20s"'
   cgr-console 'cost Category="call" Tenant="cgrates.org" Subject="1001" Destination="1002" AnswerTime="2014-08-04T13:00:00Z" Usage="1m25s"'
@@ -352,7 +352,7 @@ Since the user 1001 is marked as *prepaid* inside the telecom switch, calling be
 
 Check that 1001 balance is properly deducted, during the call, and moreover considering that general balance has priority over the shared one debits for this call should take place at first out of general balance.
 
-::
+.. code-block:: bash
 
  cgr-console 'accounts Tenant="cgrates.org" AccountIds=["1001"]'
 
@@ -364,7 +364,7 @@ The user 1002 is marked as *postpaid* inside the telecom switch hence his calls 
 
 To check that we had debits we use again console command, this time not during the call but at the end of it:
 
-::
+.. code-block:: bash
 
  cgr-console 'accounts Tenant="cgrates.org" AccountIds=["1002"]'
 
@@ -387,9 +387,9 @@ CDR Exporting
 
 Once the CDRs are mediated, they are available to be exported. One can use available RPC APIs for that or directly call exports from console:
 
-::
+.. code-block:: bash
 
- cgr-console 'cdrs_export CdrFormat="csv" ExportPath="/tmp"'
+ cgr-console 'cdrs_export ExportArgs={"ExportFormat":"*file_csv", "ExportPath":"/tmp"}'
 
 
 Fraud detection
@@ -399,12 +399,12 @@ Since we have configured some action triggers (more than 20 units of balance top
 
 To verify this mechanism simply add some random units into one account's balance:
 
-::
+.. code-block:: bash
 
- cgr-console 'balance_set Tenant="cgrates.org" Account="1003" Direction="*out" Value=23'
+ cgr-console 'balance_set Tenant="cgrates.org" Account="1003" Value=23 BalanceType="*monetary" Balance={"ID":"MonetaryBalance"}'
  tail -f /var/log/syslog -n 20
 
- cgr-console 'balance_set Tenant="cgrates.org" Account="1001" Direction="*out" Value=101'
+ cgr-console 'balance_set Tenant="cgrates.org" Account="1001" Value=101 BalanceType="*monetary" Balance={"ID":"MonetaryBalance"}'
  tail -f /var/log/syslog -n 20
 
 On the CDRs side we will be able to integrate CdrStats monitors as part of our Fraud Detection system (eg: the increase of average cost for 1001 and 1002 accounts will signal us abnormalities, hence we will be notified via syslog).
