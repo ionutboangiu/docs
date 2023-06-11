@@ -2,12 +2,12 @@ Tutorial
 ========
 
 In this tutorial, on a Debian 11 (Bullseye) virtual machine, we will do the following together:
-1. Set up a communication platform of your choice. We support the following options:
+1. Set up a SIP Server of your choice. We support the following options:
    -  FreeSWITCH
    -  Asterisk
    -  Kamailio
    -  OpenSIPS
-2. Start a CGRateS instance with the corresponding agent configured. What we call agents are basically components within CGRateS that manage the communication between CGRateS and the communication platforms.
+2. Start a CGRateS instance with the corresponding agent configured. What we call agents are basically components within CGRateS that manage the communication between CGRateS and the SIP Servers.
 3. Configure user accounts as follows:
    -1001 -  prepaid 
    -1002 -  postpaid
@@ -25,7 +25,7 @@ Software Installation:
 
 *CGRateS* already has a section within this documentation regarding installation. It can be found :ref:`here<installation>`.
 
-Regarding the communication platforms, click on the tab corresponding to the choice you made and follow the steps in order to set up:
+Regarding the SIP Servers, click on the tab corresponding to the choice you made and follow the steps in order to set up:
 
 .. tabs::
 
@@ -110,6 +110,17 @@ Regarding the communication platforms, click on the tab corresponding to the cho
 Configuration and initialization:
 ---------------------------------
 
+This section will be dedicated to configuring both the chosen SIP Server, as well as CGRateS and then get them running.
+
+For both CGRateS and the SIP Servers, we have prepared custom configurations in advance, as well as an init scripts that can be used to start the services using said configurations. It can also be used to stop/restart/check on the status of the services. Another way to do that would be to copy the configuration in the default folder, where the Server will be searching for the configuration before starting, with it usually being /etc/<software name>. CGRateS can also be started using the cgr-engine binary, like so:
+
+.. code-block:: bash
+
+         cgr-engine -config_path=<path_to_config> -logger=*stdout
+
+.. note::
+   The logger flag from the command above is optional, it's just more convenient for us to check for logs in the terminal that cgrates was started in rather than checking the syslog.
+
 .. tabs::
 
    .. group-tab:: FreeSWITCH
@@ -121,8 +132,7 @@ Configuration and initialization:
          - Have added inside default dialplan CGR own extensions just before routing towards users (found in *etc/freeswitch/dialplan/default.xml*).
 
 
-      Starting FreeSWITCH_ with custom configuration
-      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      To start FreeSWITCH_ with custom configuration, used the :
 
       .. code-block:: bash
 
@@ -157,17 +167,52 @@ Configuration and initialization:
         sudo apt install opensips
 
 
+**CGRateS** will be configured with the following subsystems enabled:
 
+ - **SessionS**: started as gateway between the SIP Server and rest of CGRateS subsystems;
+ - **ChargerS**: used to decide the number of billing runs for customer/supplier charging;
+ - **AttributeS**: used to populate extra data to requests (ie: prepaid/postpaid, passwords, paypal account, LCR profile);
+ - **RALs**: used to calculate costs as well as account bundle management;
+ - **SupplierS**: selection of suppliers for each session (in case of OpenSIPS_, it will work in tandem with their DRouting module);
+ - **StatS**: computing statistics in real-time regarding sessions and their charging;
+ - **ThresholdS**: monitoring and reacting to events coming from above subsystems;
+ - **CDRe**: exporting rated CDRs from CGR StorDB (export path: */tmp*).
+
+
+.. tabs::
+
+   .. group-tab:: FreeSWITCH
+
+      .. code-block:: bash
+
+         /usr/share/cgrates/tutorials/fs_evsock/cgrates/etc/init.d/cgrates start
+
+   .. group-tab:: Asterisk
+
+      .. code-block:: bash
+
+         /usr/share/cgrates/tutorials/asterisk_ari/cgrates/etc/init.d/cgrates start
+
+   .. group-tab:: Kamailio
+
+      .. code-block:: bash
+
+         /usr/share/cgrates/tutorials/kamevapi/cgrates/etc/init.d/cgrates start
+
+   .. group-tab:: OpenSIPS
+
+      .. code-block:: bash
+
+         /usr/share/cgrates/tutorials/osips_native/cgrates/etc/init.d/cgrates start
+
+.. note::
+   In case of OpenSIPS, CGRateS has to be started first since the dependency is reversed.
 
 
 Loading **CGRateS** Tariff Plans
 --------------------------------
 
-Before proceeding to this step, you should have **CGRateS** installed and
-started with custom configuration, depending on the tutorial you have followed.
-
-For our tutorial we load again prepared data out of shared folder, containing
-following rules:
+Now that we have **CGRateS** installed and started with one of the custom configurations, we can load the prepared data out of the shared folder, containing the following rules:
 
 - Create the necessary timings (always, asap, peak, offpeak).
 - Configure 3 destinations (1002, 1003 and 10 used as catch all rule).
@@ -276,35 +321,4 @@ To verify this mechanism simply add some random units into one account's balance
  tail -f /var/log/syslog -n 20
 
 On the CDRs side we will be able to integrate CdrStats monitors as part of our Fraud Detection system (eg: the increase of average cost for 1001 and 1002 accounts will signal us abnormalities, hence we will be notified via syslog).
-
-.. tabs::
-
-   .. group-tab:: FreeSWITCH
-
-      Installation here:
-      ::
-
-        sudo apt install freeswitch
-
-   .. group-tab:: Asterisk
-
-      Install asterisk:
-      ::
-
-        sudo apt install asterisk
-
-   .. group-tab:: Kamailio
-
-      Install kama:
-      ::
-
-        sudo apt install kamailio
-
-   .. group-tab:: OpenSIPS
-
-      Installation for this:
-      ::
-
-        sudo apt install opensips
-
 
