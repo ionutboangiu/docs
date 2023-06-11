@@ -3,26 +3,43 @@ Tutorial
 
 .. contents::
    :local:
-   :depth: 4
+   :depth: 3
 
-In this tutorial, on a Debian 11 (Bullseye) virtual machine, we will do the following together:
+Introduction
+------------
 
-1. Set up a SIP Server of your choice. We support the following options:
+This tutorial provides detailed instructions for setting up a SIP Server and managing communication between the server and the CGRateS instance. 
+
+::Note:: The development and testing of the instructions in this tutorial has been done on a Debian 11 (Bullseye) virtual machine.
+
+Scenario Overview
+-----------------
+
+The tutorial comprises the following steps:
+
+1. **SIP Server Setup**: Select and install a SIP Server. Supported options include:
       -  FreeSWITCH_
       -  Asterisk_
       -  Kamailio_
       -  OpenSIPS_
-2. Start a CGRateS instance with the corresponding agent configured. What we call agents are basically components within CGRateS that manage the communication between CGRateS and the SIP Servers.
-3. Configure user accounts as follows:
-      -  1001 -  prepaid 
-      -  1002 -  postpaid
-      -  1003 -  pseudoprepaid 
-      -  1004 -  rated 
-      -  1006 -  prepaid 
-      -  1007 -  rated
-4. Add balance to the accounts that we will use.
-5. Use Zoiper_ to make calls between the accounts we configured then check the updated balances. Feel free to use any other SIP UA.
-6. Set up fraud detection.
+   
+2. **CGRateS Initialization**: Launch a CGRateS instance with the corresponding agent configured. The term "agent" here refers to a component within CGRateS that manages the communication between CGRateS and the SIP Servers.
+
+3. **Account Configuration**: Establish user accounts with specific classifications as follows:
+      -  1001 -  Prepaid 
+      -  1002 -  Postpaid
+      -  1003 -  Pseudoprepaid 
+      -  1004 -  Rated 
+      -  1006 -  Prepaid 
+      -  1007 -  Rated
+
+4. **Balance Addition**: Allocate suitable balances to the user accounts.
+
+5. **Call Simulation**: Use Zoiper_ (or any other SIP UA of your preference) to simulate calls between the configured accounts and verify the balance updates post-calls.
+
+6. **Fraud Detection Setup**: Implement a fraud detection mechanism to ensure the security and integrity of the service.
+
+As we progress through the tutorial, each step will be elaborated in detail. Let's begin with the SIP Server Setup.
 
 
 Software Installation
