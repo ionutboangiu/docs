@@ -8,11 +8,11 @@ Tutorial
 Introduction
 ------------
 
-This tutorial provides detailed instructions for setting up a SIP Server and managing communication between the server and the CGRateS instance. Although the tutorial is developed and tested on a virtual machine with Debian 11 (Bullseye), the choice of the operating system can be flexible according to the user's preference and comfort.
+This tutorial provides detailed instructions for setting up a SIP Server and managing communication between the server and the CGRateS instance.
 
 .. note::
 
-   The author of this tutorial used Debian 11 for the development and testing of the instructions.
+   The development and testing of the instructions in this tutorial has been done on a Debian 11 (Bullseye) virtual machine.
 
 
 Scenario Overview
@@ -20,7 +20,7 @@ Scenario Overview
 
 The tutorial comprises the following steps:
 
-1. SIP Server Setup:
+1. **SIP Server Setup**:
    Select and install a SIP Server. The tutorial supports the following options:
 
    -  FreeSWITCH_
@@ -28,10 +28,10 @@ The tutorial comprises the following steps:
    -  Kamailio_
    -  OpenSIPS_
 
-2. CGRateS Initialization:
+2. **CGRateS Initialization**:
    Launch a CGRateS instance with the corresponding agent configured. In this context, an "agent" refers to a component within CGRateS that manages communication between CGRateS and the SIP Servers.
 
-3. Account Configuration:
+3. **Account Configuration**:
    Establish user accounts with specific classifications as follows:
 
    -  1001 -  Prepaid 
@@ -41,13 +41,13 @@ The tutorial comprises the following steps:
    -  1006 -  Prepaid 
    -  1007 -  Rated
 
-4. Balance Addition:
+4. **Balance Addition**:
    Allocate suitable balances to the user accounts.
 
-5. Call Simulation:
+5. **Call Simulation**:
    Use Zoiper_ (or any other SIP UA of your choice) to simulate calls between the configured accounts, and then verify the balance updates post-calls.
 
-6. Fraud Detection Setup:
+6. **Fraud Detection Setup**:
    Implement a fraud detection mechanism to secure and maintain the integrity of the service.
 
 As we progress through the tutorial, each step will be elaborated in detail. Let's embark on this journey with the SIP Server Setup.
