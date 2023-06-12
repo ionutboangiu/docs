@@ -45,7 +45,7 @@ The tutorial comprises the following steps:
    Allocate suitable balances to the user accounts.
 
 5. **Call Simulation**:
-   Use Zoiper_ (or any other SIP UA of your choice) to simulate calls between the configured accounts, and then verify the balance updates post-calls.
+   Use Zoiper_ (or any other SIP UA of your choice) to register the user accounts and simulate calls between the configured accounts, and then verify the balance updates post-calls.
 
 6. **Fraud Detection Setup**:
    Implement a fraud detection mechanism to secure and maintain the integrity of the service.
