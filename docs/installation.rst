@@ -57,17 +57,19 @@ Redhat-based Distributions
 
 For .rpm distros, we are using copr to manage the CGRateS packages:
 
--  if using a version of Linux with dnf:
+-  If using a version of Linux with dnf:
 
 .. code-block:: bash
+
    # sudo yum install -y dnf-plugins-core on RHEL 8 or CentOS Stream
    sudo dnf install -y dnf-plugins-core 
    sudo dnf copr -y enable cgrates/v0.10 
    sudo dnf install -y cgrates
 
--  for older distributions: 
+-  For older distributions: 
 
 .. code-block:: bash
+
    sudo yum install -y yum-plugin-copr
    sudo yum copr -y enable cgrates/v0.10
    sudo yum install -y cgrates
