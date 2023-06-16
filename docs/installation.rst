@@ -91,10 +91,10 @@ Prerequisites:
 
 - **Git**
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   sudo apt-get install -y git
-   # sudo dnf install -y git for .rpm distros
+      sudo apt-get install -y git
+      # sudo dnf install -y git for .rpm distros
 
 - **Go** (refer to the official Go installation docs: https://go.dev/doc/install)
 
