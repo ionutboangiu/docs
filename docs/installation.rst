@@ -68,11 +68,11 @@ For .rpm distros, we are using copr to manage the CGRateS packages:
 
 -  For older distributions: 
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   sudo yum install -y yum-plugin-copr
-   sudo yum copr -y enable cgrates/v0.10
-   sudo yum install -y cgrates
+      sudo yum install -y yum-plugin-copr
+      sudo yum copr -y enable cgrates/v0.10
+      sudo yum install -y cgrates
 
 To install a specific version of the package, run:
 
