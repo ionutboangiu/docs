@@ -59,12 +59,12 @@ For .rpm distros, we are using copr to manage the CGRateS packages:
 
 -  If using a version of Linux with dnf:
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   # sudo yum install -y dnf-plugins-core on RHEL 8 or CentOS Stream
-   sudo dnf install -y dnf-plugins-core 
-   sudo dnf copr -y enable cgrates/v0.10 
-   sudo dnf install -y cgrates
+      # sudo yum install -y dnf-plugins-core on RHEL 8 or CentOS Stream
+      sudo dnf install -y dnf-plugins-core 
+      sudo dnf copr -y enable cgrates/v0.10 
+      sudo dnf install -y cgrates
 
 -  For older distributions: 
 
