@@ -18,7 +18,6 @@ Welcome to `CGRateS`_'s documentation!
    administration
    advanced
    tutorial
-   tutorials
    miscellaneous
 
 
