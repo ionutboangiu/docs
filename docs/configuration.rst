@@ -31,10 +31,13 @@ Below is the hardcoded default configuration file for the :ref:`cgr-engine`.
 
 .. container:: toggle
 
+    .. container:: header
+
+        **Show/Hide Code**
+
    .. literalinclude:: ../data/conf/cgrates/cgrates.json
       :language: javascript
       :linenos:
-
 
 Conclusion
 ----------
