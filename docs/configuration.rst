@@ -29,7 +29,7 @@ Default Configuration
 
 Below is the hardcoded default configuration file for the :ref:`cgr-engine`. Click the button to expand and view the content.
 
-.. container:: json-spoiler
+.. container:: toggle
 
    .. literalinclude:: ../data/conf/cgrates/cgrates.json
       :language: javascript
