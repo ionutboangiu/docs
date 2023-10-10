@@ -3,26 +3,42 @@
 Configuration
 =============
 
-Has a *JSON* format with commented lines starting with *//*.
+Introduction
+------------
 
-Organized into configuration sections which offers the advantage of being easily splitable.
+The configuration file, in *JSON* format, is a crucial component that allows users to customize and control the behavior of the :ref:`cgr-engine`. This document provides detailed information on the configuration's structure, usage, and best practices.
 
-.. hint:: You can split the configuration into any number of *.json* files/directories since the :ref:cgr-engine loads recursively the complete configuration folder, alphabetically ordered
+Format & Structure
+------------------
 
+Configuration files are organized into sections, making them easily splitable for better management and readability. Each section starts with a commented line (//*), providing a brief description or instruction.
 
-All configuration options come with defaults and we have tried our best to choose the best ones for a minimum of efforts necessary when running.
+.. hint::
+   Configuration can be split into any number of *.json* files or directories. The :ref:`cgr-engine` loads these files recursively and in alphabetical order from the configuration folder.
 
-Can be loaded from local folders or remotely using HTTP transport.
+Loading & Reloading
+-------------------
 
-The configuration can be loaded at start and reloaded at run time using APIs designed for that. This can be done either as *config pull* (reload from path) or as *config push* (the *JSON BLOB* is sent via API to the engine). 
+Configuration files can be loaded from local folders or remotely via HTTP. They are loaded at startup and can be reloaded at runtime using designated APIs. Users can either *pull* the configuration (reload from path) or *push* it (send JSON BLOB via API to the engine).
 
-.. hint:: You can reload from remote HTTP server as well.
+.. hint::
+   Remote reloading from an HTTP server is also supported.
 
-Below is the default configuration file which comes hardcoded into :ref:`cgr-engine`:
+Default Configuration
+----------------------
 
-.. literalinclude:: ../data/conf/cgrates/cgrates.json
-   :language: javascript
-   :linenos:
+Below is the hardcoded default configuration file for the :ref:`cgr-engine`. Click the button to expand and view the content.
 
+.. container:: json-spoiler
 
+   .. literalinclude:: ../data/conf/cgrates/cgrates.json
+      :language: javascript
+      :linenos:
 
+.. note::
+   You might need to add some custom CSS and JavaScript to handle the spoiler functionality. Refer to the Sphinx documentation for guidance on adding static files.
+
+Conclusion
+----------
+
+Understanding and effectively using the configuration file is essential for optimizing the performance and behavior of the :ref:`cgr-engine`. For additional assistance or information, refer to the official documentation and support channels.

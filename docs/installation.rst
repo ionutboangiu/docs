@@ -36,7 +36,7 @@ You can add the CGRateS repository to your system's sources list as follows:
    sudo mv apt.cgrates.org.asc /etc/apt/trusted.gpg.d/
 
    # Add the repository to the apt sources list
-   echo "deb http://apt.cgrates.org/debian/ v0.10 main" | sudo tee /etc/apt/sources.list.d/cgrates.list
+   echo "deb http://apt.cgrates.org/debian/ nightly main" | sudo tee /etc/apt/sources.list.d/cgrates.list
 
    # Update the system repository and install CGRateS
    sudo apt-get update -y
@@ -46,7 +46,7 @@ Alternatively, you can manually install a specific .deb package as follows:
 
 .. code-block:: bash
 
-   wget http://pkg.cgrates.org/deb/v0.10/cgrates_current_amd64.deb
+   wget http://pkg.cgrates.org/deb/nightly/cgrates_current_amd64.deb
    sudo dpkg -i ./cgrates_current_amd64.deb
 
 .. note::
@@ -63,7 +63,7 @@ For .rpm distros, we are using copr to manage the CGRateS packages:
 
       # sudo yum install -y dnf-plugins-core on RHEL 8 or CentOS Stream
       sudo dnf install -y dnf-plugins-core 
-      sudo dnf copr -y enable cgrates/v0.10 
+      sudo dnf copr -y enable cgrates/master 
       sudo dnf install -y cgrates
 
 -  For older distributions: 
@@ -71,7 +71,7 @@ For .rpm distros, we are using copr to manage the CGRateS packages:
    .. code-block:: bash
 
       sudo yum install -y yum-plugin-copr
-      sudo yum copr -y enable cgrates/v0.10
+      sudo yum copr -y enable cgrates/master
       sudo yum install -y cgrates
 
 To install a specific version of the package, run:
@@ -80,8 +80,16 @@ To install a specific version of the package, run:
 
    sudo dnf install -y cgrates-<version>.x86_64
 
+Alternatively, you can manually install a specific .rpm package as follows:
+
+.. code-block:: bash
+
+   wget http://pkg.cgrates.org/rpm/nightly/epel-9-x86_64/cgrates-current.rpm
+   sudo dnf install ./cgrates_current.rpm
+
+
 .. note::
-   The entire archive of CGRateS rpm packages is available at https://copr.fedorainfracloud.org/coprs/cgrates/v0.10/packages/.
+   The entire archive of CGRateS rpm packages is available at https://copr.fedorainfracloud.org/coprs/cgrates/master/packages/ or http://pkg.cgrates.org/rpm/nightly/.
 
 Installing from Source
 ----------------------
@@ -106,8 +114,8 @@ To install the latest Go version at the time of writing this documentation, run:
    # sudo dnf install -y wget tar for .rpm distros
    sudo rm -rf /usr/local/go
    cd /tmp
-   wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
-   sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
+   wget https://go.dev/dl/go1.21.2.linux-amd64.tar.gz
+   sudo tar -C /usr/local -xzf go1.21.2.linux-amd64.tar.gz
    export PATH=$PATH:/usr/local/go/bin
 
 Installation:
@@ -119,9 +127,6 @@ Installation:
    git clone https://github.com/cgrates/cgrates.git $HOME/go/src/github.com/cgrates/cgrates
    cd $HOME/go/src/github.com/cgrates/cgrates
 
-   # Switch to v0.10 branch
-   git checkout v0.10
-
    # Compile the binaries and move them to $GOPATH/bin
    ./build.sh
 
@@ -129,12 +134,13 @@ Installation:
    sudo ln -s $HOME/go/src/github.com/cgrates/cgrates/data /usr/share/cgrates
 
    # Make cgr-engine binary available system-wide
-   sudo ln -s $HOME/go/bin/cgr-engine /usr/local/bin/cgr-engine
+   sudo ln -s $HOME/go/bin/cgr-engine /usr/bin/cgr-engine
 
    # Optional: Additional useful symbolic links
-   sudo ln -s $HOME/go/bin/cgr-loader /usr/local/bin/cgr-loader
-   sudo ln -s $HOME/go/bin/cgr-migrator /usr/local/bin/cgr-migrator
-   sudo ln -s $HOME/go/bin/cgr-console /usr/local/bin/cgr-console
+   sudo ln -s $HOME/go/bin/cgr-loader /usr/bin/cgr-loader
+   sudo ln -s $HOME/go/bin/cgr-migrator /usr/bin/cgr-migrator
+   sudo ln -s $HOME/go/bin/cgr-console /usr/bin/cgr-console
+   sudo ln -s $HOME/go/bin/cgr-tester /usr/bin/cgr-tester
 
 Creating Your Own Packages
 --------------------------
@@ -174,20 +180,23 @@ For Redhat-based distros:
    sudo dnf install -y rpm-build wget curl tar
 
    # Create build directories
-   mkdir -p $HOME/cgr_build/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+   mkdir -p $HOME/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
    # Fetch source code
    cd $HOME/go/src/github.com/cgrates/cgrates
    export gitLastCommit=$(git rev-parse HEAD)
    export rpmTag=$(git log -1 --format=%ci | date +%Y%m%d%H%M%S)+$(git rev-parse --short HEAD)
-   wget -P $HOME/cgr_build/SOURCES https://github.com/cgrates/cgrates/archive/$gitLastCommit.tar.gz
+
+   #Create the tarball from the source code
+   cd ..
+   tar -czvf  $HOME/rpmbuild/SOURCES/$gitLastCommit.tar.gz cgrates
 
    # Copy RPM spec file
-   cp $HOME/go/src/github.com/cgrates/cgrates/packages/redhat_fedora/cgrates.spec $HOME/cgr_build/SPECS
+   cp $HOME/go/src/github.com/cgrates/cgrates/packages/redhat_fedora/cgrates.spec $HOME/rpmbuild/SPECS
 
    # Build RPM package
-   cd $HOME/cgr_build
-   rpmbuild -bb --define "_topdir $HOME/cgr_build" SPECS/cgrates.spec
+   cd $HOME/rpmbuild
+   rpmbuild -bb  SPECS/cgrates.spec
 
 .. _post_install:
 
