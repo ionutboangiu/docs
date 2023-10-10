@@ -6,12 +6,12 @@ Configuration
 Introduction
 ------------
 
-The configuration file, in *JSON* format, is a crucial component that allows users to customize and control the behavior of the :ref:`cgr-engine`. This document provides detailed information on the configuration's structure, usage, and best practices.
+The configuration file allows users to customize and control the behavior of the :ref:`cgr-engine`. This section provides detailed information on how to structure and use the documentation.
 
 Format & Structure
 ------------------
 
-Configuration files are organized into sections, making them easily splitable for better management and readability. Each section starts with a commented line (//*), providing a brief description or instruction.
+Configuration files are organized into sections, making them easily splitable for better management and readability. Even though the format of the files is JSON, it also allows commented lines starting with \\\\.
 
 .. hint::
    Configuration can be split into any number of *.json* files or directories. The :ref:`cgr-engine` loads these files recursively and in alphabetical order from the configuration folder.
